@@ -1,0 +1,22 @@
+{
+  "name": "website-react",
+  "version": "1.0.0",
+  "description": "A website about me, with a little bit of professional and creative flair tossed in.",
+  "main": "src/main.js",
+  "scripts": {
+    "mongod": "mkdir -p ./db/data && mongod --dbpath ./db/data",
+    "build": "npm run build --prefix ./src/client && npm run build --prefix ./src/server",
+    "prod": "npm run prod --prefix ./src/server -- -s ../client/build -p",
+    "dev-client": "npm run start ---prefix ./src/client",
+    "dev-server": "npm run dev --prefix ./src/server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brandonmkelley/website-react.git"
+  },
+  "author": "Brandon M. Kelley [brandonmkelley@outlook.com]",
+  "bugs": {
+    "url": "https://github.com/brandonmkelley/website-react/issues"
+  },
+  "homepage": "https://github.com/brandonmkelley/website-react#readme"
+}

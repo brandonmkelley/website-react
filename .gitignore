@@ -1,0 +1,11 @@
+
+db
+node_modules
+
+src/client/package-lock.json
+src/client/node_modules
+
+src/server/package-lock.json
+src/server/node_modules
+src/server/static
+
