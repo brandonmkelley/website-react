@@ -85,13 +85,14 @@ export default function(params: TopNavParams) {
 
     return (
         <Navbar bg="transparent" variant="light" expand="lg" style={{ height: params.height }}>
-            <Navbar.Brand as={Link} to="/">Uniq</Navbar.Brand>
+            <Navbar.Brand as={Link} to="/">Brandon M. Kelley</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
+                    {/*
                 <Nav.Link as={Link} to="/media">Media</Nav.Link>
                 <Nav.Link as={Link} to="/app" style={{ visibility: ((userEmail) ? 'visible' : 'hidden') }}>App</Nav.Link>
-                {/*
+                
                 <Nav.Link href="#link">Link</Nav.Link>
                 <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                     <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>

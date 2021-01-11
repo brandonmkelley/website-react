@@ -1,0 +1,13 @@
+
+ul {
+    margin-bottom: 30px;
+}
+li {
+    margin: 5px 0;
+}
+#banner {
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    height: 500px;
+}

@@ -14,9 +14,11 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
 import TopNav from './components/TopNav'
 
-import Home from './pages/Home'
+import PersonalHome from './pages/PersonalHome'
 import Media from './pages/Media'
 import App from './pages/App'
+
+
 
 import { layoutSlice } from './slices/layout'
 import { authSlice } from './slices/auth'
@@ -48,9 +50,11 @@ export default function() {
       <Row noGutters={ true }>
         <Col xs={ 12 }><TopNav height={ navHeight }/></Col>
         <Switch>
-          <Route exact path="/" component={ Home } />
+          <Route exact path="/" component={ PersonalHome } />
+          { /*
           <Route path="/media/:shortName?" component={ Media } />
           <Route path="/app" component={ App } />
+          */ }
         </Switch>
       </Row>
     </BrowserRouter>

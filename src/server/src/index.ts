@@ -31,13 +31,20 @@ else {
 }
 
 // Read -s argument if static files need to be served (prod only.)
-pathIndex = process.argv.indexOf('-s')
+var argStart = 0;
 
-if (pathIndex !== -1 && process.argv.length > pathIndex + 1) {
-    var staticPath = process.argv[pathIndex + 1];
-    app.use(express.static(staticPath))
+do {
+    pathIndex = process.argv.indexOf('-s', argStart)
+
+    if (pathIndex !== -1 && process.argv.length > pathIndex + 1) {
+        var staticPath = process.argv[pathIndex + 1]
+        console.log('Loading static files from path: ' + staticPath)
+        app.use(express.static(staticPath))
+    }
+
+    argStart = pathIndex + 1;
 }
-
+while (argStart && argStart < process.argv.length)
 
 import * as socketio from 'socket.io'
 const io = socketio(server)

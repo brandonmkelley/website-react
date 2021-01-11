@@ -8,7 +8,7 @@
     "build": "npm run build --prefix ./src/client && npm run build --prefix ./src/server",
     "prod": "npm run prod --prefix ./src/server -- -s ../client/build -p",
     "dev-client": "npm run start ---prefix ./src/client",
-    "dev-server": "npm run dev --prefix ./src/server"
+    "dev-server": "npm run dev --prefix ./src/server -- -s ../client/static"
   },
   "repository": {
     "type": "git",
