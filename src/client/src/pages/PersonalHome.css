@@ -6,8 +6,10 @@ li {
     margin: 5px 0;
 }
 #banner {
+    background-image: url('/images/Personal-Banner-Resize-2.jpg');
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
     height: 500px;
+    width: 100%;
 }

@@ -24,11 +24,16 @@ else {
     port = 8080;
 }
 // Read -s argument if static files need to be served (prod only.)
-pathIndex = process.argv.indexOf('-s');
-if (pathIndex !== -1 && process.argv.length > pathIndex + 1) {
-    var staticPath = process.argv[pathIndex + 1];
-    app.use(express.static(staticPath));
-}
+var argStart = 0;
+do {
+    pathIndex = process.argv.indexOf('-s', argStart);
+    if (pathIndex !== -1 && process.argv.length > pathIndex + 1) {
+        var staticPath = process.argv[pathIndex + 1];
+        console.log('Loading static files from path: ' + staticPath);
+        app.use(express.static(staticPath));
+    }
+    argStart = pathIndex + 1;
+} while (argStart && argStart < process.argv.length);
 var socketio = require("socket.io");
 var io = socketio(server);
 var mongoose = require("mongoose");
@@ -68,7 +73,7 @@ db.once('open', function() {
 */
 var firebaseAdmin = require('firebase-admin');
 var firebaseAdminRef = firebaseAdmin.initializeApp({
-    credential: firebaseAdmin.credential.cert('./firebaseServiceAccount.json'),
+    credential: firebaseAdmin.credential.cert('./static/firebaseServiceAccount.json'),
     databaseURL: 'https://userportal-fa7ab.firebaseio.com'
 }, 'ADMIN');
 io.on('connection', function (socket) {

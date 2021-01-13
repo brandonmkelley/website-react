@@ -8,7 +8,7 @@ import './PersonalHome.css'
 export default () => (
         <React.Fragment>
             
-            <div id="banner" style={{ backgroundImage: "url('/images/Personal-Banner-Resize-2.jpg')" }}></div>
+            <div id="banner"></div>
 
 <div className="container text-center pt-5 pb-5" style={{ fontSize: "1.4rem" }}>
     "<i>We can only see a short distance ahead, but we can see plenty there that needs to be done.</i>"
@@ -16,7 +16,7 @@ export default () => (
 </div>
 
 
-<div className="bg-light">
+<div className="bg-light" style={{ width: "100%" }}>
     <div className="container text-justify pt-5 pb-5">
         Hello! Thank you for visiting my website. I am a university graduate, friend, and innovator in the tech industry.
         I received a <b>B.S. in Computer Engineering</b> at California Polytechnic State University in
