@@ -6,7 +6,7 @@
   "scripts": {
     "mongod": "mkdir -p ./db/data && mongod --dbpath ./db/data",
     "build": "npm run build --prefix ./src/client && npm run build --prefix ./src/server",
-    "prod": "npm run prod --prefix ./src/server -- -s ../client/build -p",
+    "prod": "npm run prod --prefix ./src/server -- -s ../client/build -s ../client/static -p",
     "dev-client": "npm run start ---prefix ./src/client",
     "dev-server": "npm run dev --prefix ./src/server -- -s ../client/static"
   },
@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/brandonmkelley/website-react/issues"
   },
-  "homepage": "https://github.com/brandonmkelley/website-react#readme"
+  "homepage": "https://github.com/brandonmkelley/website-react#readme",
+  "dependencies": {
+    "npm": "^6.14.11"
+  }
 }

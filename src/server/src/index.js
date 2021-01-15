@@ -12,9 +12,9 @@ var pathIndex = process.argv.indexOf('-p');
 var prod = pathIndex !== -1;
 if (prod) {
     var httpsOptions = {
-        key: fs.readFileSync('private.key'),
-        cert: fs.readFileSync('certificate.crt'),
-        ca: fs.readFileSync('ca_bundle.crt')
+        key: fs.readFileSync('./static/private.key'),
+        cert: fs.readFileSync('./static/certificate.crt'),
+        ca: fs.readFileSync('./static/ca_bundle.crt')
     };
     server = https_1.createServer(httpsOptions, app);
     port = 4430;
@@ -109,10 +109,10 @@ io.on('connection', function (socket) {
         if (context && context.sid)
             firebaseAdminRef.auth().verifyIdToken(context.sid)
                 .then(function (decoded) {
-                User.findOneAndRemove({ email: context.email }, function () {
-                    // Definitely replace this with a change stream listener.
-                    User.find(function (err, users) { return socket.broadcast.emit('read-user-list', users); });
-                });
+                // User.findOneAndRemove({ email: context.email }, () => {
+                // Definitely replace this with a change stream listener.
+                //        User.find((err: any, users: any) => socket.broadcast.emit('read-user-list', users))
+                // })
             });
     });
 });

@@ -16,9 +16,9 @@ var prod = pathIndex !== -1
 
 if (prod) {
     const httpsOptions = {
-        key: fs.readFileSync('private.key'),
-        cert: fs.readFileSync('certificate.crt'),
-        ca: fs.readFileSync('ca_bundle.crt')
+    	key: fs.readFileSync('./static/private.key'),
+	cert: fs.readFileSync('./static/certificate.crt'),
+	ca: fs.readFileSync('./static/ca_bundle.crt')
     }
     
     server = createHTTPSServer(httpsOptions, app)
@@ -142,10 +142,10 @@ io.on('connection', (socket: any) => {
         if (context && context.sid)
             firebaseAdminRef.auth().verifyIdToken(context.sid)
                 .then(decoded => {
-                    User.findOneAndRemove({ email: context.email }, () => {
+		// User.findOneAndRemove({ email: context.email }, () => {
                         // Definitely replace this with a change stream listener.
-                        User.find((err: any, users: any) => socket.broadcast.emit('read-user-list', users))
-                    })
+			//        User.find((err: any, users: any) => socket.broadcast.emit('read-user-list', users))
+			// })
                 })
     })
 })
