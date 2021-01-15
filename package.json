@@ -18,8 +18,5 @@
   "bugs": {
     "url": "https://github.com/brandonmkelley/website-react/issues"
   },
-  "homepage": "https://github.com/brandonmkelley/website-react#readme",
-  "dependencies": {
-    "npm": "^6.14.11"
-  }
+  "homepage": "https://github.com/brandonmkelley/website-react#readme"
 }
