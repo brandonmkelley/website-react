@@ -21,8 +21,8 @@ export default () => (
         Hello! Thank you for visiting my website. I am a university graduate, friend, and innovator in the tech industry.
         I received a <b>B.S. in Computer Engineering</b> at California Polytechnic State University in
         San Luis Obispo, California, culminating in <b>advanced computer architecture</b> and <b>human-computer
-        interaction</b> research topics. I currently work as a Systems Analyst / Developer at
-        <a href="https://recsolar.com/" target="_blank">REC Solar Commercial Corporation</a>.
+        interaction</b> research topics. I currently work as a Systems Analyst / Developer 
+        at <a href="https://recsolar.com/" target="_blank">REC Solar Commercial Corporation</a>.
         I collaborate with peers to address societal problems through research and the application of modern
         technology. My favorite hobbies include playing guitar, networking, and changing my lifestyle.
         Please feel free to <a href="/contact">contact me</a>.
@@ -33,7 +33,7 @@ export default () => (
 <div className="container">
     <div className="row">
         <div className="col-12 col-lg-4 pt-5 pb-4 text-center text-lg-left">
-            <a href="#" onClick={() => console.log('Engineering clicked!')} style={{ display: "inline-block", maxWidth: "300px" }}>
+            <a href="#" onClick={e => e.preventDefault() } style={{ display: "inline-block", maxWidth: "300px" }}>
                 <img src="/images/REC Solar Headshot - Resized.png" width="100%" />
                 <h4 className="mt-3 mb-0">Engineering</h4>
             </a>
@@ -74,7 +74,7 @@ export default () => (
     <hr />
     <div className="row">
         <div className="col-12 col-lg-4 pt-5 pb-4 text-center text-lg-right order-lg-last">
-            <a href="#" onClick={() => console.log('Community clicked!')} className="d-inline-block" style={{ maxWidth: "300px" }}>
+            <a href="#" onClick={e => e.preventDefault() } className="d-inline-block" style={{ maxWidth: "300px" }}>
                 <img src="/images/foodbank.jpg" width="100%" />
                 <h4 className="mt-3 mb-0">Community</h4>
             </a>
@@ -115,7 +115,7 @@ export default () => (
     <hr/>
     <div className="row">
         <div className="col-12 col-lg-4 pt-5 pb-4 text-center text-lg-left">
-            <a href="#" onClick={ () => console.log('Ideology clicked!') } className="d-inline-block" style={{ maxWidth: "300px" }}>
+            <a href="#" onClick={ e => e.preventDefault() } className="d-inline-block" style={{ maxWidth: "300px" }}>
                 <img src="/images/Ideology.jpg" width="100%" />
                 <h4 className="mt-3 mb-0">Ideology</h4>
             </a>
