@@ -18,10 +18,10 @@ export default () => (
 
 <div className="bg-light" style={{ width: "100%" }}>
     <div className="container text-justify pt-5 pb-5">
-        Hello! Thank you for visiting my website. I am a university graduate, friend, and innovator in the tech industry.
+        Hello! Thank you for visiting my website. I am an engineer, friend, and innovator in the tech industry.
         I received a <b>B.S. in Computer Engineering</b> at California Polytechnic State University in
-        San Luis Obispo, California, culminating in <b>advanced computer architecture</b> and <b>human-computer
-        interaction</b> research topics. I currently work as a Systems Analyst / Developer 
+        San Luis Obispo, California, with culminating work in <b>advanced computer architecture</b> and <b>human-computer
+        interaction</b>. I currently work as a Systems Analyst / Developer 
         at <a href="https://recsolar.com/" target="_blank">REC Solar Commercial Corporation</a>.
         I collaborate with peers to address societal problems through research and the application of modern
         technology. My favorite hobbies include playing guitar, networking, and changing my lifestyle.

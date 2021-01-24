@@ -83,8 +83,10 @@ export default function(params: TopNavParams) {
         firebase.auth(firebaseApp).signOut()
     }
 
+    const padToHeight = Math.floor((parseInt(params.height) - 40) / 2);
+
     return (
-        <Navbar bg="transparent" variant="light" expand="lg" style={{ height: params.height }}>
+        <Navbar bg="transparent" variant="light" expand="lg" style={{ paddingTop: padToHeight, paddingBottom: padToHeight }}>
             <Navbar.Brand as={Link} to="/">Brandon M. Kelley</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">

@@ -11,7 +11,7 @@ export const layoutSlice = createSlice({
             return {
                 ...state,
                 layoutPlatform: 'Desktop',
-                layoutNavHeight: '8vh',
+                layoutNavHeight: '56px',
                 layoutJumboHeight: '32vh',
                 layoutCardHeight: '60vh'
             }
