@@ -25,7 +25,7 @@ export default () => (
         at <a href="https://recsolar.com/" target="_blank">REC Solar Commercial Corporation</a>.
         I collaborate with peers to address societal problems through research and the application of modern
         technology. My favorite hobbies include playing guitar, networking, and changing my lifestyle.
-        Please feel free to <a href="/contact">contact me</a>.
+        Please feel free to connect with me.
     </div>
 </div>
 
@@ -67,7 +67,7 @@ export default () => (
             <h4>Resources</h4>
             <ul>
                 <li><a target="_blank" href="https://linkedin.com/in/14bmkelley">LinkedIn profile</a></li>
-                <li><a target="_blank" href="~/files/Resume - Brandon Micale Kelley.pdf">Downloadable resume</a></li>
+                {/* <li><a target="_blank" href="~/files/Resume - Brandon Micale Kelley.pdf">Downloadable resume</a></li> */}
             </ul>
         </div>
     </div>
