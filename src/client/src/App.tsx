@@ -15,22 +15,15 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import TopNav from './components/TopNav'
 
 import PersonalHome from './pages/PersonalHome'
-import Media from './pages/Media'
-import App from './pages/App'
 
-
-
-import { layoutSlice } from './slices/layout'
 import { authSlice } from './slices/auth'
+import FlexWorks_Chat from './pages/FlexWorks_Chat'
+import FlexWorks_Email from './pages/FlexWorks_Email'
 
 export default function() {
   const dispatch = useDispatch()
   const services = useContext(ServiceContext)
   const firebaseApp = services.firebaseApp
-
-  useEffect(() => {
-    dispatch(layoutSlice.actions.desktop())
-  })
 
   // Bind auth state changed listener to auth slice to update UI state.
   useEffect(() => {
@@ -41,21 +34,26 @@ export default function() {
         dispatch(authSlice.actions.onAuthStateChanged({ email: "" }))
     })
   })
-  
 
   const navHeight = useSelector((state: any) => state.layoutNavHeight) || ''
+  const appHeight = useSelector((state: any) => state.layoutAppHeight) || ''
 
   return (
     <BrowserRouter>
       <Row noGutters={ true }>
         <Col xs={ 12 }><TopNav height={ navHeight }/></Col>
-        <Switch>
-          <Route exact path="/" component={ PersonalHome } />
-          { /*
-          <Route path="/media/:shortName?" component={ Media } />
-          <Route path="/app" component={ App } />
-          */ }
-        </Switch>
+        <div style={{ height: appHeight, width: '100%' }}>
+          <Switch>
+            <Route exact path="/" component={ PersonalHome }/>
+            <Route exact path="/flexworks/chat" component={ FlexWorks_Chat }/>
+            <Route exact path="/flexworks/email" component={ FlexWorks_Email }/>
+            { /*
+            <Route path="/media/:shortName?" component={ Media } />
+            <Route path="/app" component={ App } />
+            */ }
+          </Switch>
+        </div>
+        
       </Row>
     </BrowserRouter>
   )

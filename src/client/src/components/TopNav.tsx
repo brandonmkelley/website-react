@@ -17,6 +17,7 @@ import Popover from 'react-bootstrap/Popover'
 import { Link } from 'react-router-dom'
 
 import { ServiceContext } from '../index'
+import { NavDropdown } from 'react-bootstrap'
 
 export interface TopNavParams {
     height: string,
@@ -91,6 +92,15 @@ export default function(params: TopNavParams) {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
+                    { userEmail &&
+                        <NavDropdown title="Products" id="productsDropDown">
+                            <NavDropdown title="FlexWorks" id="flexWorksDropDown">
+                                <Nav.Link as={Link} to="/flexworks/chat">Chat</Nav.Link>
+                                <Nav.Link as={Link} to="/flexworks/email">Email</Nav.Link>
+                            </NavDropdown>
+                        </NavDropdown>
+                    }
+                    
                     {/*
                 <Nav.Link as={Link} to="/media">Media</Nav.Link>
                 <Nav.Link as={Link} to="/app" style={{ visibility: ((userEmail) ? 'visible' : 'hidden') }}>App</Nav.Link>
