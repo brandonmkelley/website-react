@@ -1,0 +1,81 @@
+{
+    "user": {
+        "1": {
+            "name": "Brandon Kelley",
+            "email": "brandonmkelley@outlook.com",
+            "handle": "brandonmkelley"
+        },
+        "2": {
+            "name": "Katie Taylor",
+            "email": "katiemtaylor@whatever.net",
+            "handle": "kt"
+        },
+        "3": {
+            "name": "Someone else",
+            "email": "someone@gmail.com",
+            "handle": "someone"
+        }
+    },
+    "message": {
+        "1": {
+            "subjectID": "1",
+            "body": "This is what message 1 has to say, it is typically longer content.",
+            "fromUserID": "1",
+            "recipientUserID": ["2"],
+            "informationalUserID": ["3"],
+            "sentDt": "2021-02-01T00:00:00.000Z"
+        },
+        "2": {
+            "subjectID": "1",
+            "body": "This is what message 1 has to say, it is typically longer content.",
+            "fromUserID": "2",
+            "recipientUserID": ["1"],
+            "informationalUserID": ["3"],
+            "sentDt": "2021-02-02T00:00:00.000Z"
+        },
+        "3": {
+            "subjectID": "1",
+            "body": "This is what message 1 has to say, it is typically longer content.",
+            "fromUserID": "3",
+            "recipientUserID": ["2", "3"],
+            "informationalUserID": [],
+            "sentDt": "2021-02-03T00:00:00.000Z"
+        },
+        "4": {
+            "subjectID": "1",
+            "body": "This is what message 1 has to say, it is typically longer content.",
+            "fromUserID": "1",
+            "recipientUserID": ["2"],
+            "informationalUserID": ["3"],
+            "sentDt": "2021-02-04T00:00:00.000Z"
+        },
+        "5": {
+            "subjectID": "2",
+            "body": "This is what message 2 has to say, it is typically longer content.",
+            "fromUserID": "3",
+            "recipientUserID": ["1"],
+            "informationalUserID": ["2"],
+            "sentDt": "2021-02-05T00:00:00.000Z"
+        },
+        "6": {
+            "subjectID": "1",
+            "body": "This is what message 1 has to say, it is typically longer content.",
+            "fromUserID": "1",
+            "recipientUserID": ["2"],
+            "informationalUserID": ["3"],
+            "sentDt": "2021-02-06T00:00:00.000Z"
+        }
+    },
+    "subject": {
+        "1": {
+            "name": "This is thread 1",
+            "createdDt": "2021-02-01T00:00:00.000Z",
+            "createdUser": "1"
+        },
+        "2": {
+            "name": "This is thread 2",
+            "createdDt": "2021-02-05T00:00:00.000Z",
+            "createdUser": "3"
+        }
+    }
+}

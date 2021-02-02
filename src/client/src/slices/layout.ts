@@ -8,8 +8,6 @@ export const layoutSlice = createSlice({
     initialState: initialState,
     reducers: {
         desktopWithScroll: (state: AppState) => {
-            console.log('running desktopWithScroll reducer')
-
             const footerHeight = document.getElementById('footer')?.clientHeight || 0
 
             return {
@@ -24,8 +22,6 @@ export const layoutSlice = createSlice({
             }
         },
         desktopNoScroll: (state: AppState) => {
-            console.log('running desktopNoScroll reducer')
-
             const footerHeight = document.getElementById('footer')?.clientHeight || 0
 
             return {
