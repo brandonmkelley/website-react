@@ -31,7 +31,7 @@ export const layoutSlice = createSlice({
                 layoutNavHeight: '56px',
                 layoutJumboHeight: '32vh',
                 layoutCardHeight: '60vh',
-                layoutAppHeight: window.innerHeight - 56 - footerHeight,
+                layoutAppHeight: '' + (window.innerHeight - 56 - footerHeight) + 'px',
                 layoutFooterHeight: footerHeight
             }
         }

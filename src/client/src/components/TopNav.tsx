@@ -92,6 +92,7 @@ export default function(params: TopNavParams) {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
+                    
                     { userEmail &&
                         <NavDropdown title="Products" id="productsDropDown">
                             <NavDropdown title="FlexWorks" id="flexWorksDropDown">
@@ -99,6 +100,10 @@ export default function(params: TopNavParams) {
                                 <Nav.Link as={Link} to="/flexworks/email">Email</Nav.Link>
                             </NavDropdown>
                         </NavDropdown>
+                    }
+
+                    { userEmail && 
+                        <span className="fa fa-envelope p-1" style={{ fontSize: '16px' }}></span>
                     }
                     
                     {/*
