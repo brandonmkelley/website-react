@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { useLocation } from 'react-router-dom'
 
@@ -12,7 +12,7 @@ import { Container } from 'react-bootstrap'
 
 import { layoutSlice } from '../slices/layout'
 
-import flexworksData from '../data/flexworks.json'
+//import flexworksData from '../data/flexworks.json'
 
 export default () => {
     const dispatch = useDispatch()
@@ -30,17 +30,29 @@ export default () => {
         }
     }, [location])
 
+    const messages = useSelector((state: any) => state.messages) || {}
+    const subjects = useSelector((state: any) => state.subjects) || {}
+
     return (
         <React.Fragment>
             <Container fluid={ true } style={{ width: '100%', height: '100%' }}>
                 <Row style={{ height: '100%' }}>
                     <Col xs={ 4 } style={{ overflowY: 'scroll', height: '100%' }}>
-                        { Object.values(flexworksData.message).map((m: any, i: any) => (
+                        {
+                            Object.values(messages).map((m: any, i: any) => (
+                                <div style={{ borderTop: "1px solid black", paddingTop: '8px' }} onClick={ console.log }>
+                                    <b>{ (subjects as { [name: string]: { [name: string]: string } })[m.subjectID].name }</b>
+                                    <p>{ m.body }</p>
+                                </div>
+                            ))
+                        }
+
+                        {/* Object.values(flexworksData.message).map((m: any, i: any) => (
                             <div style={{ borderTop: "1px solid black", paddingTop: '8px' }} onClick={ console.log }>
                                 <b>{ (flexworksData.subject as { [name: string]: { [name: string]: string } })[m.subjectID].name }</b>
                                 <p>{ m.body }</p>
                             </div>
-                        )) }
+                        )) */}
                     </Col>
                     <Col xs={ 8 } style={{ overflowY: 'scroll', height: '100%', paddingTop: '8px' }}>
                         <h2 style={{ marginBottom: '16px' }}>This is the title of the current message</h2>
