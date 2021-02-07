@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -11,28 +11,35 @@ import { Container } from 'react-bootstrap'
 
 import { layoutSlice } from '../slices/layout'
 
+import { useDataLayerOn, useDataLayerOff } from '../slices'
+
 const messageIDPrefix = 'message-id-'
 const messageIDPrefixLen = messageIDPrefix.length
 
 export default () => {
     const dispatch = useDispatch()
     const location = useLocation()
+
+    const [isOn, on] = useDataLayerOn()
+    const [isOff, off] = useDataLayerOff()
     const [activeMessage, setActiveMessage] = useState<any>(null)
 
     useEffect(() => {
         dispatch(layoutSlice.actions.desktopNoScroll())
-    }, [dispatch, location])
+    }, [location, dispatch])
 
     useEffect(() => {
         console.log('open chat data feed.')
+        on('subject-all')
 
         return () => {
             console.log('close chat data feed.')
+            off('subject-all')
         }
-    }, [location])
+    }, [location, on, off])
 
-    const userID = useSelector((state: any) => state.userID) || {}
-    const users = useSelector((state: any) => state.users) || {}
+    //const userID = useSelector((state: any) => state.userID) || {}
+    //const users = useSelector((state: any) => state.users) || {}
     const messages = useSelector((state: any) => state.messages) || {}
     const subjects = useSelector((state: any) => state.subjects) || {}
 

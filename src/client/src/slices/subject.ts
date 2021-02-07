@@ -1,12 +1,12 @@
 
 import { createSlice } from '@reduxjs/toolkit'
 
-import { initialState } from '../AppState'
+import { AppState, initialState } from '../AppState'
 
-import { subject } from '../data/flexworks.json'
-
-export const messageSlice = createSlice({
-    name: 'message',
-    initialState: { ...initialState, subjects: subject },
-    reducers: {}
+export const subjectSlice = createSlice({
+    name: 'subject',
+    initialState: initialState,
+    reducers: {
+        all: (state: AppState, action: any) => ({ ...state, subjects: action.payload })
+    }
 })
