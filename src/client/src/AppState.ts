@@ -1,5 +1,5 @@
 
-import { message, subject } from './data/flexworks.json'
+import { user, message, subject } from './data/flexworks.json'
 
 export interface AppState {
     layoutPlatform?: string | null,
@@ -7,6 +7,8 @@ export interface AppState {
     layoutJumboHeight?: string | null,
     layoutCardHeight?: string | null,
     userEmail?: string | null,
+    userID?: string | null,
+    users?: object | null,
     messages?: object | null,
     subjects?: object | null
 }
@@ -17,6 +19,8 @@ export const initialState : AppState = {
     layoutJumboHeight: '50px',
     layoutCardHeight: '50px',
     userEmail: null,
+    userID: "1",
+    users: user,
     messages: message,
     subjects: subject
 }

@@ -1,8 +1,7 @@
 
+import React, { useEffect, useState } from 'react'
 
-import React, { useEffect } from 'react'
-
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { useLocation } from 'react-router-dom'
 
@@ -12,36 +11,65 @@ import { Container } from 'react-bootstrap'
 
 import { layoutSlice } from '../slices/layout'
 
-import flexworksData from '../data/flexworks.json'
+const messageIDPrefix = 'message-id-'
+const messageIDPrefixLen = messageIDPrefix.length
 
 export default () => {
     const dispatch = useDispatch()
     const location = useLocation()
+    const [activeMessage, setActiveMessage] = useState<any>(null)
 
     useEffect(() => {
         dispatch(layoutSlice.actions.desktopNoScroll())
     }, [dispatch, location])
+
+    useEffect(() => {
+        console.log('open email data feeds.')
+
+        return () => {
+            console.log('close email data feeds.')
+        }
+    }, [location])
+
+    const users = useSelector((state: any) => state.users) || {}
+    const messages = useSelector((state: any) => state.messages) || {}
+    const subjects = useSelector((state: any) => state.subjects) || {}
+
+    useEffect(() => {
+        if (Object.keys(messages).length > 0) {
+            var sortedMessages = Object.values(messages).sort((m1: any, m2: any) => m2.sentDt - m1.sentDt)
+            var latestMessage = sortedMessages[0]
+            setActiveMessage(latestMessage)
+        }
+    }, [messages])
 
     return (
         <React.Fragment>
             <Container fluid={ true } style={{ width: '100%', height: '100%' }}>
                 <Row style={{ height: '100%' }}>
                     <Col xs={ 4 } style={{ overflowY: 'scroll', height: '100%' }}>
-                        { Object.values(flexworksData.message).map((m: any, i: any) => (
-                            <div style={{ borderTop: "1px solid black", paddingTop: '8px' }} onClick={ console.log }>
-                                <b>{ (flexworksData.subject as { [name: string]: { [name: string]: string } })[m.subjectID].name }</b>
-                                <p>{ m.body }</p>
-                            </div>
-                        )) }
+                        {
+                            Object.keys(messages).map((id: any) => (
+                                <div key={ id } id={ messageIDPrefix + id } style={{ borderTop: "1px solid black", paddingTop: '8px' }}
+                                    onClick={ e => setActiveMessage(messages[e.currentTarget.id.substring(messageIDPrefixLen)]) }>
+                                    <b>{ (subjects as { [name: string]: { [name: string]: string } })[messages[id].subjectID].name }</b>
+                                    <p>{ messages[id].body }</p>
+                                </div>
+                            ))
+                        }
                     </Col>
                     <Col xs={ 8 } style={{ overflowY: 'scroll', height: '100%', paddingTop: '8px' }}>
-                        <h2 style={{ marginBottom: '16px' }}>This is the title of the current message</h2>
-                        <p>From: Katie Taylor &lt;katiemtaylor@whatever.net&gt;<br/>
-                            To: Brandon Kelley &lt;brandonmkelley@outlook.com&gt;<br/>
-                            Cc: Someone else &lt;somebody@gmail.com&gt;</p>
-                        <hr></hr>
-                        <p>See the content of this message down here.</p>
-                        <p>It might also have paragraphs and whatnot.</p>
+                        { activeMessage === null && <b>You have no messages to show.</b> }
+                        { activeMessage !== null && 
+                            <div>
+                                <h2 style={{ marginBottom: '16px' }}>{ subjects[activeMessage!.subjectID].name }</h2>
+                                <p>From: Katie Taylor &lt;katiemtaylor@whatever.net&gt;<br/>
+                                    To: Brandon Kelley &lt;brandonmkelley@outlook.com&gt;<br/>
+                                    Cc: Someone else &lt;somebody@gmail.com&gt;</p>
+                                <hr></hr>
+                                <p>{ activeMessage!.body }</p>
+                            </div>
+                        }
                     </Col>
                 </Row>
             </Container>
