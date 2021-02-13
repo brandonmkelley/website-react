@@ -116,6 +116,23 @@ io.on('connection', function (socket) {
             });
     });
 });
+app.get('trigger-subject-all', function (req, res) {
+    /*
+    req.socket.emit('subject-all', {
+        "1": {
+            "name": "This is NEW thread 1",
+            "createdDt": "2021-02-01T00:00:00.000Z",
+            "createdUser": "1"
+        },
+        "2": {
+            "name": "This is NEW thread 2",
+            "createdDt": "2021-02-05T00:00:00.000Z",
+            "createdUser": "2"
+        }
+    })
+    */
+    res.end('trigger successful.');
+});
 if (prod)
     server.listen(port);
 else

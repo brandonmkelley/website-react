@@ -3,6 +3,27 @@ import * as express from "express"
 
 const app = express()
 
+
+
+app.get('/trigger-subject-all', (req, res) => {
+    req.socket.emit('subject-all', {
+        "1": {
+            "name": "This is NEW thread 1",
+            "createdDt": "2021-02-01T00:00:00.000Z",
+            "createdUser": "1"
+        },
+        "2": {
+            "name": "This is NEW thread 2",
+            "createdDt": "2021-02-05T00:00:00.000Z",
+            "createdUser": "2"
+        }
+    })
+
+    res.end('trigger on subject-all successful.')
+})
+
+
+
 import { createServer as createHTTPServer } from 'http'
 import { createServer as createHTTPSServer } from 'https'
 import * as fs from 'fs'
@@ -17,8 +38,8 @@ var prod = pathIndex !== -1
 if (prod) {
     const httpsOptions = {
     	key: fs.readFileSync('./static/private.key'),
-	cert: fs.readFileSync('./static/certificate.crt'),
-	ca: fs.readFileSync('./static/ca_bundle.crt')
+        cert: fs.readFileSync('./static/certificate.crt'),
+        ca: fs.readFileSync('./static/ca_bundle.crt')
     }
     
     server = createHTTPSServer(httpsOptions, app)
@@ -39,7 +60,7 @@ do {
     if (pathIndex !== -1 && process.argv.length > pathIndex + 1) {
         var staticPath = process.argv[pathIndex + 1]
         console.log('Loading static files from path: ' + staticPath)
-        app.use(express.static(staticPath))
+        app.use('/static', express.static(staticPath))
     }
 
     argStart = pathIndex + 1;
@@ -83,7 +104,7 @@ io.use(socketSession(appSession))
 
 db.on('error', console.error.bind(console, 'Mongo connection error:'));
 
-User.watch().on('change', console.log)
+// User.watch().on('change', console.log)
 // User.find((err: any, users: any) => console.log(users))
 
 /*

@@ -36,7 +36,7 @@ export default () => {
             console.log('close chat data feed.')
             off('subject-all')
         }
-    }, [location, on, off])
+    }, [location.pathname])
 
     //const userID = useSelector((state: any) => state.userID) || {}
     //const users = useSelector((state: any) => state.users) || {}

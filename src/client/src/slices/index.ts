@@ -89,21 +89,21 @@ export function useDataLayerOn() {
     const dispatch = useDispatch()
 
     const ioOnEventHandler = (state: any, action: any) => {
-        const ioEvent = action.payload as string
+        const ioEvent = action as string
 
         (state as { [name: string]: boolean })[ioEvent] = true
 
-        console.log('Turning on socket receipt for event: ' + ioEvent)
-
         socket.on(ioEvent, (result: any) => {
+            dispatch(allSlicesMap[ioEvent](result))
+
             console.log('Socket event triggered for event: ' + ioEvent)
             console.log('Dispatching the following result: ')
             console.log(result)
-
-            dispatch(allSlicesMap[ioEvent](result))
         })
 
-        return state
+        console.log('Turning on socket receipt for event: ' + ioEvent)
+
+        return { ...state }
     }
 
     return useReducer(ioOnEventHandler, ioEvents)
@@ -113,13 +113,13 @@ export function useDataLayerOff() {
     const { socket } = useContext(ServiceContext)
 
     const ioOffEventHandler = (state: any, action: any) => {
-        const ioEvent = action.payload as string
+        const ioEvent = action as string
+
+        socket.off(ioEvent);
 
         (state as { [name: string]: boolean })[ioEvent] = false
 
         console.log('Turning off socket receipt for event: ' + ioEvent)
-
-        socket.off(ioEvent)
 
         return state
     }
