@@ -45,7 +45,7 @@ export default () => {
                 <div className="row">
                     <div className="col-12 col-lg-4 pt-5 pb-4 text-center text-lg-left">
                         <a href="#" onClick={e => e.preventDefault() } style={{ display: "inline-block", maxWidth: "300px" }}>
-                            <img src="/images/REC Solar Headshot - Resized.png" width="100%" />
+                            <img src="/static/images/REC Solar Headshot - Resized.png" width="100%" />
                             <h4 className="mt-3 mb-0">Engineering</h4>
                         </a>
                     </div>
@@ -86,7 +86,7 @@ export default () => {
                 <div className="row">
                     <div className="col-12 col-lg-4 pt-5 pb-4 text-center text-lg-right order-lg-last">
                         <a href="#" onClick={e => e.preventDefault() } className="d-inline-block" style={{ maxWidth: "300px" }}>
-                            <img src="/images/foodbank.jpg" width="100%" />
+                            <img src="/static/images/foodbank.jpg" width="100%" />
                             <h4 className="mt-3 mb-0">Community</h4>
                         </a>
                     </div>
@@ -127,7 +127,7 @@ export default () => {
                 <div className="row">
                     <div className="col-12 col-lg-4 pt-5 pb-4 text-center text-lg-left">
                         <a href="#" onClick={ e => e.preventDefault() } className="d-inline-block" style={{ maxWidth: "300px" }}>
-                            <img src="/images/Ideology.jpg" width="100%" />
+                            <img src="/static/images/Ideology.jpg" width="100%" />
                             <h4 className="mt-3 mb-0">Ideology</h4>
                         </a>
                     </div>

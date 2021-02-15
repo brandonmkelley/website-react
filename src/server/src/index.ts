@@ -3,27 +3,6 @@ import * as express from "express"
 
 const app = express()
 
-
-
-app.get('/trigger-subject-all', (req, res) => {
-    req.socket.emit('subject-all', {
-        "1": {
-            "name": "This is NEW thread 1",
-            "createdDt": "2021-02-01T00:00:00.000Z",
-            "createdUser": "1"
-        },
-        "2": {
-            "name": "This is NEW thread 2",
-            "createdDt": "2021-02-05T00:00:00.000Z",
-            "createdUser": "2"
-        }
-    })
-
-    res.end('trigger on subject-all successful.')
-})
-
-
-
 import { createServer as createHTTPServer } from 'http'
 import { createServer as createHTTPSServer } from 'https'
 import * as fs from 'fs'
@@ -170,6 +149,26 @@ io.on('connection', (socket: any) => {
                 })
     })
 })
+
+
+app.get('/api/trigger-subject-all', (req, res) => {
+    io.emit('subject-all', {
+        "1": {
+            "name": "This is NEW thread 1",
+            "createdDt": "2021-02-01T00:00:00.000Z",
+            "createdUser": "1"
+        },
+        "2": {
+            "name": "This is NEW thread 2",
+            "createdDt": "2021-02-05T00:00:00.000Z",
+            "createdUser": "2"
+        }
+    })
+
+    res.end('trigger on subject-all successful.')
+})
+
+
 
 if (prod)
     server.listen(port)

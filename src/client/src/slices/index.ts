@@ -15,9 +15,10 @@ const allSlices = [subjectSlice]
 const allSlicesMap = allSlices.reduce((result: any, slice) => {
     for (var actionName of Object.keys(slice.actions))
         result[slice.name + '-' + actionName] = (slice.actions as { [name: string]: Action })[actionName]
+
+    return result
 }, {})
 
-console.log(allSlicesMap)
 /*
 function on(context: any, ioEvent: string, dispatch: Dispatch) {
     console.log('Turning on socket receipt for event: ' + ioEvent)
@@ -94,6 +95,8 @@ export function useDataLayerOn() {
         (state as { [name: string]: boolean })[ioEvent] = true
 
         socket.on(ioEvent, (result: any) => {
+            console.log(ioEvent)
+
             dispatch(allSlicesMap[ioEvent](result))
 
             console.log('Socket event triggered for event: ' + ioEvent)
