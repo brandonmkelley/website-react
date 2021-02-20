@@ -8,9 +8,6 @@ export const subjectSlice = createSlice({
     initialState: initialState,
     reducers: {
         all: (state: AppState, action: any) => {
-            console.log(state)
-            console.log(action)
-
             return ({ ...state, subjects: action.payload })
         }
     }

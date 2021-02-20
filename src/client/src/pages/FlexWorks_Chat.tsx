@@ -11,7 +11,7 @@ import { Container } from 'react-bootstrap'
 
 import { layoutSlice } from '../slices/layout'
 
-import { useDataLayerOn, useDataLayerOff } from '../slices'
+import useDatabaseSubscription from '../slices'
 
 const messageIDPrefix = 'message-id-'
 const messageIDPrefixLen = messageIDPrefix.length
@@ -19,27 +19,18 @@ const messageIDPrefixLen = messageIDPrefix.length
 export default () => {
     const dispatch = useDispatch()
     const location = useLocation()
-
-    const [isOn, on] = useDataLayerOn()
-    const [isOff, off] = useDataLayerOff()
     const [activeMessage, setActiveMessage] = useState<any>(null)
+
+    const { subscribe, unsubscribe } = useDatabaseSubscription()
 
     useEffect(() => {
         dispatch(layoutSlice.actions.desktopNoScroll())
-    }, [location, dispatch])
 
-    useEffect(() => {
-        console.log('open chat data feed.')
-        on('subject-all')
+        subscribe('subject-all')
 
-        return () => {
-            console.log('close chat data feed.')
-            off('subject-all')
-        }
+        return () => { unsubscribe('subject-all') }
     }, [location.pathname])
 
-    //const userID = useSelector((state: any) => state.userID) || {}
-    //const users = useSelector((state: any) => state.users) || {}
     const messages = useSelector((state: any) => state.messages) || {}
     const subjects = useSelector((state: any) => state.subjects) || {}
 

@@ -29,7 +29,7 @@ export default () => {
         return () => {
             console.log('close email data feeds.')
         }
-    }, [location])
+    }, [location.pathname])
 
     const users = useSelector((state: any) => state.users) || {}
     const messages = useSelector((state: any) => state.messages) || {}
