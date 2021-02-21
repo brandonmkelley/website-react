@@ -51,7 +51,7 @@ const io = socketio(server)
 
 import * as mongoose from 'mongoose'
 
-mongoose.connect('mongodb://localhost/uniq?replicaSet=rs0', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://localhost/flexworks?replicaSet=rs0', { useNewUrlParser: true, useUnifiedTopology: true })
 
 const userSchema = new mongoose.Schema({
     email: String
@@ -59,6 +59,14 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('users', userSchema)
 
+const subjectSchema = new mongoose.Schema({
+    id: Number,
+    name: String,
+    createdDt: String,
+    createdUser: String
+})
+
+const Subject = mongoose.model('subjects', subjectSchema)
 
 const db = mongoose.connection
 
@@ -81,9 +89,21 @@ app.use(appSession)
 
 io.use(socketSession(appSession))
 
-db.on('error', console.error.bind(console, 'Mongo connection error:'));
+db.on('error', console.error.bind(console, 'Mongo connection error:'))
 
-// User.watch().on('change', console.log)
+User.watch().on('change', console.log)
+
+Subject.watch().on('change', async e => {
+    const subjects = await Subject.find({})
+
+    const remapped = subjects.reduce((r, i) => {
+        r[i.id] = i
+        return r
+    }, {})
+
+    io.emit('subject-all', remapped)
+})
+
 // User.find((err: any, users: any) => console.log(users))
 
 /*
