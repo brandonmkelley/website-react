@@ -70,13 +70,14 @@ export default function(params: TopNavParams) {
             .catch(catchSignInError)
             .then(e => {
                 afterSignIn(e)
-
+/*
                 const currentUser = firebase.auth(firebaseApp).currentUser
 
                 if (currentUser !== null)
                     currentUser
                         .getIdToken()
                         .then(sid => socket.emit('insert-user', { sid: sid, email: currentUser.email }))
+                        */
             })
     }
 

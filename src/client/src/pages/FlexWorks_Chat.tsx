@@ -26,13 +26,24 @@ export default () => {
     useEffect(() => {
         dispatch(layoutSlice.actions.desktopNoScroll())
 
+        subscribe('user-all')
         subscribe('subject-all')
+        subscribe('message-all')
 
-        return () => { unsubscribe('subject-all') }
+        return () => {
+            unsubscribe('user-all')
+            unsubscribe('subject-all')
+            unsubscribe('message-all')
+        }
     }, [location.pathname])
 
+    const users = useSelector((state: any) => state.users) || {}
     const messages = useSelector((state: any) => state.messages) || {}
     const subjects = useSelector((state: any) => state.subjects) || {}
+
+    console.log(users)
+    console.log(messages)
+    console.log(subjects)
 
     useEffect(() => {
         if (Object.keys(messages).length > 0) {
@@ -53,7 +64,7 @@ export default () => {
                             Object.keys(messages).map((id: any) => (
                                 <div key={ id } id={ messageIDPrefix + id } style={{ borderTop: "1px solid black", paddingTop: '8px' }}
                                     onClick={ e => setActiveMessage(messages[e.currentTarget.id.substring(messageIDPrefixLen)]) }>
-                                    <b>{ (subjects as { [name: string]: { [name: string]: string } })[messages[id].subjectID].name }</b>
+                                    <b>{ ((subjects as { [name: string]: { [name: string]: string } })[messages[id].subjectID] || {}).name }</b>
                                     <p>{ messages[id].body }</p>
                                 </div>
                             ))
@@ -63,8 +74,8 @@ export default () => {
                         { activeMessage === null && <b>You have no messages to show.</b> }
                         { activeMessage !== null && 
                             <div>
-                                <h2 style={{ marginBottom: '16px' }}>{ subjects[activeMessage!.subjectID].name }</h2>
-                                <p>From: Katie Taylor &lt;katiemtaylor@whatever.net&gt;<br/>
+                                <h2 style={{ marginBottom: '16px' }}>{ (subjects[activeMessage!.subjectID] || {}).name }</h2>
+                                <p>From: { (users[activeMessage!.fromUserID] || {}).email }<br/>
                                     To: Brandon Kelley &lt;brandonmkelley@outlook.com&gt;<br/>
                                     Cc: Someone else &lt;somebody@gmail.com&gt;</p>
                                 <hr></hr>

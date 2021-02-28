@@ -7,9 +7,11 @@ import { useDispatch } from 'react-redux'
 
 import { ServiceContext } from '../'
 
+import { userSlice } from './user'
 import { subjectSlice } from './subject'
+import { messageSlice } from './message'
 
-const allSlices = [subjectSlice]
+const allSlices = [ userSlice, subjectSlice, messageSlice ]
 
 const allSlicesMap = allSlices.reduce((result: any, slice) => {
     for (var actionName of Object.keys(slice.actions))
@@ -18,6 +20,8 @@ const allSlicesMap = allSlices.reduce((result: any, slice) => {
     return result
 }, {})
 
+console.log(allSlicesMap)
+
 function useDatabaseState() {
     const { socket } = useContext(ServiceContext)
     const dispatch = useDispatch()
@@ -25,7 +29,7 @@ function useDatabaseState() {
     const subscribe = (state: any, action: any) => {
         const event = action as string;
 
-        console.log('Subscribing to Socket IO event: ' + event)
+        //console.log('Subscribing to Socket IO event: ' + event)
 
         socket.on(event, (result: any) => {
             dispatch(allSlicesMap[event](result))
@@ -34,6 +38,8 @@ function useDatabaseState() {
             console.log('Dispatching the following result: ')
             console.log(result)
         });
+
+        socket.emit(event)
 
         return { ...state }
     }

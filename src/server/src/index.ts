@@ -53,6 +53,9 @@ import * as mongoose from 'mongoose'
 
 mongoose.connect('mongodb://localhost/flexworks?replicaSet=rs0', { useNewUrlParser: true, useUnifiedTopology: true })
 
+
+
+/*
 const userSchema = new mongoose.Schema({
     email: String
 })
@@ -67,6 +70,7 @@ const subjectSchema = new mongoose.Schema({
 })
 
 const Subject = mongoose.model('subjects', subjectSchema)
+*/
 
 const db = mongoose.connection
 
@@ -91,17 +95,38 @@ io.use(socketSession(appSession))
 
 db.on('error', console.error.bind(console, 'Mongo connection error:'))
 
-User.watch().on('change', console.log)
+//User.watch().on('change', console.log)
 
-Subject.watch().on('change', async e => {
-    const subjects = await Subject.find({})
 
-    const remapped = subjects.reduce((r, i) => {
+import User from './models/User'
+import Subject from './models/Subject'
+import Message from './models/Message'
+
+function mapDBRowsToDictionary(rows: any[]) : any {
+    return rows.reduce((r, i) => {
         r[i.id] = i
         return r
     }, {})
+}
 
-    io.emit('subject-all', remapped)
+User.watch().on('change', async _ =>
+    io.emit('user-all', mapDBRowsToDictionary(await User.find({}))))
+
+Subject.watch().on('change', async _ =>
+    io.emit('subject-all', mapDBRowsToDictionary(await Subject.find({}))))
+
+Message.watch().on('change', async _ =>
+    io.emit('message-all', mapDBRowsToDictionary(await Message.find({}))))
+
+io.on('connection', (socket: any) => {
+    socket.on('user-all', async _ =>
+        io.emit('user-all', mapDBRowsToDictionary(await User.find({}))))
+
+    socket.on('subject-all', async _ =>
+        io.emit('subject-all', mapDBRowsToDictionary(await Subject.find({}))))
+
+    socket.on('message-all', async _ =>
+        io.emit('message-all', mapDBRowsToDictionary(await Message.find({}))))
 })
 
 // User.find((err: any, users: any) => console.log(users))
@@ -133,6 +158,8 @@ io.on('connection', (socket: any) => {
             doc.save()
         }))
 */
+
+/*
     socket.on('read-page-app', (context) => {
         if (context && context.sid)
             firebaseAdminRef.auth().verifyIdToken(context.sid)
@@ -144,7 +171,10 @@ io.on('connection', (socket: any) => {
         else
             socket.emit('read-user-list', [])
     })
+    */
 
+    // Legacy: create user in Firebase auth syncing from client back to MongoDB.
+    /*
     socket.on('insert-user', (context) => {
         if (context && context.sid)
             firebaseAdminRef.auth().verifyIdToken(context.sid)
@@ -155,9 +185,11 @@ io.on('connection', (socket: any) => {
                     })
                 })
     })
+    */
 
     //socket.on('patch-user')
 
+    /*
     socket.on('delete-user', (context) => {
         if (context && context.sid)
             firebaseAdminRef.auth().verifyIdToken(context.sid)
@@ -168,8 +200,8 @@ io.on('connection', (socket: any) => {
 			// })
                 })
     })
+    */
 })
-
 
 app.get('/api/trigger-subject-all', (req, res) => {
     io.emit('subject-all', {
