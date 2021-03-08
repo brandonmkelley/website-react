@@ -41,10 +41,6 @@ export default () => {
     const messages = useSelector((state: any) => state.messages) || {}
     const subjects = useSelector((state: any) => state.subjects) || {}
 
-    console.log(users)
-    console.log(messages)
-    console.log(subjects)
-
     useEffect(() => {
         if (Object.keys(messages).length > 0) {
             var sortedMessages = Object.values(messages).sort((m1: any, m2: any) => m2.sentDt - m1.sentDt)

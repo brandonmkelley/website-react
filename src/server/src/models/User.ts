@@ -4,15 +4,15 @@ import { isStringLiteral } from 'typescript';
 
 export interface IUser extends mongoose.Document {
     email: String,
-    name: String,
-    handle: String,
+    firstName: String,
+    lastName: String,
     createdUser: String
 }
 
 const UserSchema = new mongoose.Schema<IUser>({
     email: { type: String },
-    name: { type: String },
-    handle: { type: String },
+    firstName: { type: String },
+    lastName: { type: String },
     createdUser: { type: String, required: true }
 }, {
     timestamps: true

@@ -11,16 +11,14 @@ import { userSlice } from './user'
 import { subjectSlice } from './subject'
 import { messageSlice } from './message'
 
-const allSlices = [ userSlice, subjectSlice, messageSlice ]
+export const dataSlices = [ subjectSlice, userSlice, messageSlice ]
 
-const allSlicesMap = allSlices.reduce((result: any, slice) => {
+const allSlicesMap = dataSlices.reduce((result: any, slice: any) => {
     for (var actionName of Object.keys(slice.actions))
         result[slice.name + '-' + actionName] = (slice.actions as { [name: string]: Action })[actionName]
 
     return result
 }, {})
-
-console.log(allSlicesMap)
 
 function useDatabaseState() {
     const { socket } = useContext(ServiceContext)
@@ -34,9 +32,9 @@ function useDatabaseState() {
         socket.on(event, (result: any) => {
             dispatch(allSlicesMap[event](result))
 
-            console.log('Socket event triggered for event: ' + event)
-            console.log('Dispatching the following result: ')
-            console.log(result)
+            //console.log('Socket event triggered for event: ' + event)
+            //console.log('Dispatching the following result: ')
+            //console.log(result)
         });
 
         socket.emit(event)

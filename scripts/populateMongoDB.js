@@ -1,9 +1,21 @@
 
 // These ought to be sync'd from the start w/ Firebase Auth.
 const usersToPopulate = [
-    { email: 'brandonmkelley@outlook.com' },
-    { email: '14bmkelley@gmail.com' },
-    { email: 'katiemtaylor@cox.net' }
+    {
+        email: 'brandonmkelley@outlook.com',
+        firstName: 'Brandon',
+        lastName: 'Kelley'
+    },
+    {
+        email: '14bmkelley@gmail.com',
+        firstName: 'Brandon',
+        lastName: 'Kelley (Other)'
+    },
+    {
+        email: 'katiemtaylor@cox.net',
+        firstName: 'Katie',
+        lastName: 'Taylor'
+    }
 ]
 
 db.users.insert(usersToPopulate)

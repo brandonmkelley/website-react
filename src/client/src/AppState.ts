@@ -1,6 +1,4 @@
 
-import { user, message, subject } from './data/flexworks.json'
-
 export interface AppState {
     layoutPlatform?: string | null,
     layoutNavHeight?: string | null,
@@ -20,7 +18,7 @@ export const initialState : AppState = {
     layoutCardHeight: '50px',
     userEmail: null,
     userID: "1",
-    users: user,
-    messages: message,
-    subjects: subject
+    users: {},
+    messages: {},
+    subjects: {}
 }
