@@ -13,6 +13,16 @@ import { messageSlice } from './message'
 
 export const dataSlices = [ subjectSlice, userSlice, messageSlice ]
 
+export class Subscriber {
+    sid: string
+    event: string
+
+    constructor(sid: string, event: string) {
+        this.sid = sid
+        this.event = event
+    }
+}
+
 const allSlicesMap = dataSlices.reduce((result: any, slice: any) => {
     for (var actionName of Object.keys(slice.actions))
         result[slice.name + '-' + actionName] = (slice.actions as { [name: string]: Action })[actionName]
@@ -24,20 +34,18 @@ function useDatabaseState() {
     const { socket } = useContext(ServiceContext)
     const dispatch = useDispatch()
 
-    const subscribe = (state: any, action: any) => {
-        const event = action as string;
-
+    const subscribe = (state: any, subscriber: Subscriber) => {
         //console.log('Subscribing to Socket IO event: ' + event)
 
-        socket.on(event, (result: any) => {
-            dispatch(allSlicesMap[event](result))
+        socket.on(subscriber.event, (result: any) => {
+            dispatch(allSlicesMap[subscriber.event](result))
 
             //console.log('Socket event triggered for event: ' + event)
             //console.log('Dispatching the following result: ')
             //console.log(result)
         });
 
-        socket.emit(event)
+        socket.emit(subscriber.event)
 
         return { ...state }
     }

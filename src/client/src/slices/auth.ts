@@ -8,8 +8,9 @@ export const authSlice = createSlice({
     initialState: initialState,
     reducers: {
         onAuthStateChanged: (state: AppState, action: any) => {
+            var sid = action.payload.sid
             var email = action.payload.email
-            return { ...state, userEmail: email }
+            return { ...state, userSid: sid, userEmail: email }
         }
     }
 })

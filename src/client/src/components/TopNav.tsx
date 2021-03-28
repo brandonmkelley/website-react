@@ -144,14 +144,18 @@ export default function(params: TopNavParams) {
                     </Form>
                 }
                 { userEmail &&
-                    <div className="mr-2">Logged in as: <b style={{ color: '#777' }}>{ userEmail }</b></div>
+                    <div>Logged in as: <b style={{ color: '#777' }}>{ userEmail }</b></div>
+                }
+                { userEmail && 
+                    <Nav.Link as={Link} to="/flexworks/account"
+                        className="fa fa-user-circle pt-2 pb-1 mt-0 mb-0 mr-3 ml-3"
+                        style={{ fontSize: '16px' }}></Nav.Link>
                 }
                 { userEmail &&
                     <Form inline>
                         <Button variant="outline-danger" onClick={ signOut }>Sign out</Button>
                     </Form>
                 }
-                
                 { /*userEmail && 
                     <Form inline>
                         <FormControl type="text" placeholder="Search" className="mr-sm-2" />

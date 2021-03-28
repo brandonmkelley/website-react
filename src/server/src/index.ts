@@ -110,7 +110,9 @@ function mapDBRowsToDictionary(rows: any[]) : any {
 }
 
 User.watch().on('change', async _ =>
-    io.emit('user-all', mapDBRowsToDictionary(await User.find({}))))
+    io.emit('user-all', mapDBRowsToDictionary(await User.find({}))))  
+ 
+//User.aggregate().match({ })
 
 Subject.watch().on('change', async _ =>
     io.emit('subject-all', mapDBRowsToDictionary(await Subject.find({}))))

@@ -11,7 +11,7 @@ import { Container } from 'react-bootstrap'
 
 import { layoutSlice } from '../slices/layout'
 
-import useDatabaseSubscription from '../slices'
+import useDatabaseSubscription, { Subscriber } from '../slices'
 
 const messageIDPrefix = 'message-id-'
 const messageIDPrefixLen = messageIDPrefix.length
@@ -23,19 +23,23 @@ export default () => {
 
     const { subscribe, unsubscribe } = useDatabaseSubscription()
 
+    const userSid: string | null | undefined = useSelector((state: any) => state.userSid) || {}
+
     useEffect(() => {
         dispatch(layoutSlice.actions.desktopNoScroll())
 
-        subscribe('user-all')
-        subscribe('subject-all')
-        subscribe('message-all')
+        if (userSid) {
+            subscribe(new Subscriber(userSid, 'user-all'))
+            subscribe(new Subscriber(userSid, 'subject-all'))
+            subscribe(new Subscriber(userSid, 'message-all'))
+        }
 
         return () => {
             unsubscribe('user-all')
             unsubscribe('subject-all')
             unsubscribe('message-all')
         }
-    }, [location.pathname])
+    }, [location.pathname, userSid])
 
     const users = useSelector((state: any) => state.users) || {}
     const messages = useSelector((state: any) => state.messages) || {}

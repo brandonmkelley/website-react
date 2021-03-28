@@ -5,6 +5,7 @@ export interface AppState {
     layoutJumboHeight?: string | null,
     layoutCardHeight?: string | null,
     userEmail?: string | null,
+    userSid?: string | null,
     userID?: string | null,
     users?: object | null,
     messages?: object | null,
@@ -17,7 +18,7 @@ export const initialState : AppState = {
     layoutJumboHeight: '50px',
     layoutCardHeight: '50px',
     userEmail: null,
-    userID: "1",
+    userSid: null,
     users: {},
     messages: {},
     subjects: {}
