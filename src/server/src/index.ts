@@ -97,6 +97,12 @@ db.on('error', console.error.bind(console, 'Mongo connection error:'))
 
 //User.watch().on('change', console.log)
 
+var firebaseAdmin = require('firebase-admin');
+
+var firebaseAdminRef = firebaseAdmin.initializeApp({
+credential: firebaseAdmin.credential.cert('./static/firebaseServiceAccount.json'),
+    databaseURL: 'https://userportal-fa7ab.firebaseio.com'
+  }, 'ADMIN');
 
 import User from './models/User'
 import Subject from './models/Subject'
@@ -119,7 +125,7 @@ Subject.watch().on('change', async _ =>
 
 Message.watch().on('change', async _ =>
     io.emit('message-all', mapDBRowsToDictionary(await Message.find({}))))
-
+    
 io.on('connection', (socket: any) => {
     socket.on('user-all', async _ =>
         io.emit('user-all', mapDBRowsToDictionary(await User.find({}))))
@@ -129,6 +135,29 @@ io.on('connection', (socket: any) => {
 
     socket.on('message-all', async _ =>
         io.emit('message-all', mapDBRowsToDictionary(await Message.find({}))))
+    
+    socket.off('user-id', console.log)
+
+    socket.on('user-id', async (subscriber: any) => {
+        //console.log(subscriber)
+
+        if (subscriber && subscriber.sid)
+            firebaseAdminRef.auth().verifyIdToken(subscriber.sid)
+                .then(async (decoded: any) => {
+                    //console.log(decoded)
+
+                    // Working!
+                    socket.emit('user-id', await User.findOne({ email: decoded.email }))
+
+                    const userIdPipeline = User.aggregate().match({ email: decoded.email }).pipeline()
+
+                    // Not working yet.
+                    User.watch(userIdPipeline).on('change',
+                        async _ => io.emit('user-id', await User.findOne({ email: decoded.email })))  
+                })
+        else
+            socket.emit('user-id', null)
+    })
 })
 
 // User.find((err: any, users: any) => console.log(users))
@@ -144,13 +173,6 @@ db.once('open', function() {
     User.watch().on('change', console.log)
 });
 */
-
-var firebaseAdmin = require('firebase-admin');
-
-var firebaseAdminRef = firebaseAdmin.initializeApp({
-credential: firebaseAdmin.credential.cert('./static/firebaseServiceAccount.json'),
-    databaseURL: 'https://userportal-fa7ab.firebaseio.com'
-  }, 'ADMIN');
 
 io.on('connection', (socket: any) => {
 /*

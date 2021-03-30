@@ -25,15 +25,25 @@ export default function() {
     useEffect(() => {
         dispatch(layoutSlice.actions.desktopNoScroll())
 
-        if (userSid)
+        if (userSid) {
             subscribe(new Subscriber(userSid, 'user-all'))
+            subscribe(new Subscriber(userSid, 'user-id'))
+        }
+            
         //subscribe('message-all')
 
         return () => {
             unsubscribe('user-all')
+            unsubscribe('user-id')
             //unsubscribe('message-all')
         }
     }, [location.pathname, userSid])
+
+    const user: object | null | undefined = useSelector((state: any) => state.user)
+
+    useEffect(() => {
+        console.log(user)
+    }, [user])
 
     return (<React.Fragment>
             <Container fluid>

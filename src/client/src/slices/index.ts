@@ -16,10 +16,12 @@ export const dataSlices = [ subjectSlice, userSlice, messageSlice ]
 export class Subscriber {
     sid: string
     event: string
+    payload: any
 
-    constructor(sid: string, event: string) {
+    constructor(sid: string, event: string, payload?: any) {
         this.sid = sid
         this.event = event
+        this.payload = payload
     }
 }
 
@@ -45,7 +47,7 @@ function useDatabaseState() {
             //console.log(result)
         });
 
-        socket.emit(subscriber.event)
+        socket.emit(subscriber.event, subscriber)
 
         return { ...state }
     }

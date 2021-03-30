@@ -6,7 +6,7 @@ export interface AppState {
     layoutCardHeight?: string | null,
     userEmail?: string | null,
     userSid?: string | null,
-    userID?: string | null,
+    user?: object | null,
     users?: object | null,
     messages?: object | null,
     subjects?: object | null
@@ -19,6 +19,7 @@ export const initialState : AppState = {
     layoutCardHeight: '50px',
     userEmail: null,
     userSid: null,
+    user: null,
     users: {},
     messages: {},
     subjects: {}
