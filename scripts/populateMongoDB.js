@@ -4,17 +4,20 @@ const usersToPopulate = [
     {
         email: 'brandonmkelley@outlook.com',
         firstName: 'Brandon',
-        lastName: 'Kelley'
+        lastName: 'Kelley',
+        createdUser: 'brandonmkelley@outlook.com'
     },
     {
         email: '14bmkelley@gmail.com',
         firstName: 'Brandon',
-        lastName: 'Kelley (Other)'
+        lastName: 'Kelley (Other)',
+        createdUser: 'brandonmkelley@outlook.com'
     },
     {
         email: 'katiemtaylor@cox.net',
         firstName: 'Katie',
-        lastName: 'Taylor'
+        lastName: 'Taylor',
+        createdUser: 'brandonmkelley@outlook.com'
     }
 ]
 

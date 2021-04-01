@@ -104,9 +104,10 @@ credential: firebaseAdmin.credential.cert('./static/firebaseServiceAccount.json'
     databaseURL: 'https://userportal-fa7ab.firebaseio.com'
   }, 'ADMIN');
 
-import User from './models/User'
+import User, { IUser } from './models/User'
 import Subject from './models/Subject'
 import Message from './models/Message'
+import { ChangeEventUpdate } from "mongodb"
 
 function mapDBRowsToDictionary(rows: any[]) : any {
     return rows.reduce((r, i) => {
@@ -117,8 +118,6 @@ function mapDBRowsToDictionary(rows: any[]) : any {
 
 User.watch().on('change', async _ =>
     io.emit('user-all', mapDBRowsToDictionary(await User.find({}))))  
- 
-//User.aggregate().match({ })
 
 Subject.watch().on('change', async _ =>
     io.emit('subject-all', mapDBRowsToDictionary(await Subject.find({}))))
@@ -138,6 +137,7 @@ io.on('connection', (socket: any) => {
     
     socket.off('user-id', console.log)
 
+    // Should accept EITHER subscriber or payload
     socket.on('user-id', async (subscriber: any) => {
         //console.log(subscriber)
 
@@ -146,17 +146,26 @@ io.on('connection', (socket: any) => {
                 .then(async (decoded: any) => {
                     //console.log(decoded)
 
-                    // Working!
                     socket.emit('user-id', await User.findOne({ email: decoded.email }))
 
-                    const userIdPipeline = User.aggregate().match({ email: decoded.email }).pipeline()
+                    const userIdPipeline = User.aggregate()
+                        .match({ 'fullDocument.email': decoded.email })
+                        .match({ 'operationType': { '$in': ['update'] } })
+                        .pipeline()
 
-                    // Not working yet.
-                    User.watch(userIdPipeline).on('change',
-                        async _ => io.emit('user-id', await User.findOne({ email: decoded.email })))  
+                    User.watch(userIdPipeline, { 'fullDocument': 'updateLookup' })
+                        .on('change', (e: ChangeEventUpdate<mongoose.Model<IUser>>) => io.emit('user-id', e.fullDocument))
                 })
         else
             socket.emit('user-id', null)
+    })
+
+    socket.on('user', async (e: any) => {
+        const user = await User.findById(e.user._id)
+
+        Object.assign(user, e.user)
+
+        await user.save()
     })
 })
 
