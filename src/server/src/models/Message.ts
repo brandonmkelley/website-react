@@ -10,7 +10,7 @@ export interface IMessage extends mongoose.Document {
     fromUserID: IUser['_id'],
     recipientUserID: [IUser['_id']],
     informationalUserID: [IUser['_id']],
-    sendDt: Date,
+    sentDt: Date,
     createdUser: String
 }
 
@@ -23,10 +23,10 @@ const MessageSchema = new mongoose.Schema<IMessage>({
     fromUserID: { type: mongoose.Schema.Types.ObjectId },
     recipientUserID: { type: [mongoose.Schema.Types.ObjectId] },
     informationalUserID: { type: [mongoose.Schema.Types.ObjectId] },
-    sendDt: Date,
+    sentDt: Date,
     createdUser: { type: String, required: true }
 }, {
     timestamps: true
 });
 
-export default mongoose.model<IUser>('Message', MessageSchema);
+export default mongoose.model<IMessage>('Message', MessageSchema);

@@ -79,7 +79,7 @@ const messagesToPopulate = [
     {
         "subjectID": subjectIds[1],
         "body": "This is what message 1 has to say, it is typically longer content.",
-        "fromUserID": userIds[2],
+        "fromUserID": userIds[1],
         "recipientUserID": [userIds[0]],
         "informationalUserID": [],
         "sentDt": "2021-02-04T00:00:00.000Z"
@@ -96,7 +96,7 @@ const messagesToPopulate = [
         "subjectID": subjectIds[1],
         "body": "This is what message 1 has to say, it is typically longer content.",
         "fromUserID": userIds[2],
-        "recipientUserID": [userIds[0]],
+        "recipientUserID": [userIds[1]],
         "informationalUserID": [],
         "sentDt": "2021-02-06T00:00:00.000Z"
     }

@@ -106,8 +106,8 @@ credential: firebaseAdmin.credential.cert('./static/firebaseServiceAccount.json'
 
 import User, { IUser } from './models/User'
 import Subject from './models/Subject'
-import Message from './models/Message'
-import { ChangeEventUpdate } from "mongodb"
+import Message, { IMessage } from './models/Message'
+import { ChangeEventUpdate, ObjectID } from "mongodb"
 
 function mapDBRowsToDictionary(rows: any[]) : any {
     return rows.reduce((r, i) => {
@@ -166,6 +166,38 @@ io.on('connection', (socket: any) => {
         Object.assign(user, e.user)
 
         await user.save()
+    })
+
+    socket.on('chat-id-user-all-view', async (subscriber: any) => {
+        // Experiment with SQL-like aggregate queries in MongoDB/Mongoose.
+
+        if (subscriber && subscriber.sid)
+            firebaseAdminRef.auth().verifyIdToken(subscriber.sid)
+                .then(async (decoded: any) => {
+
+                    const user = await User.findOne({ email: decoded.email })
+                    const messages = await Message.find({})
+
+                    const chatUserPipeline = Message.aggregate()
+                        .unwind('recipientUserID')
+                        .match({ '$or': [
+                            { 'fromUserID': { '$eq': user._id } },
+                            { 'recipientUserID': { '$eq': user._id } }
+                        ]})
+                        .group({
+                            _id: '$_id',
+                            fromUserID: { '$first': '$fromUserID' },
+                            sendDt: { '$max': '$sentDt' }
+                        })
+                        .pipeline()
+
+                    Message.aggregate(chatUserPipeline)
+                        .exec((err, result) => {
+                            console.log(err)
+                            console.log(result)
+                        })
+                })
+
     })
 })
 

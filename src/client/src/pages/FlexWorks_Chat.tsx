@@ -12,6 +12,7 @@ import { Container } from 'react-bootstrap'
 import { layoutSlice } from '../slices/layout'
 
 import useDatabaseSubscription, { Subscriber } from '../slices'
+import { ServiceContext } from '..'
 
 const messageIDPrefix = 'message-id-'
 const messageIDPrefixLen = messageIDPrefix.length
@@ -19,6 +20,7 @@ const messageIDPrefixLen = messageIDPrefix.length
 export default () => {
     const dispatch = useDispatch()
     const location = useLocation()
+    const { socket } = useContext(ServiceContext)
     const [activeMessage, setActiveMessage] = useState<any>(null)
 
     const { subscribe, unsubscribe } = useDatabaseSubscription()
@@ -29,22 +31,28 @@ export default () => {
         dispatch(layoutSlice.actions.desktopNoScroll())
 
         if (userSid) {
+            subscribe(new Subscriber(userSid, 'user-id'))
             subscribe(new Subscriber(userSid, 'user-all'))
             subscribe(new Subscriber(userSid, 'subject-all'))
             subscribe(new Subscriber(userSid, 'message-all'))
+
+            socket.emit('chat-id-user-all-view', { sid: userSid })
         }
 
         return () => {
+            unsubscribe('user-id')
             unsubscribe('user-all')
             unsubscribe('subject-all')
             unsubscribe('message-all')
         }
     }, [location.pathname, userSid])
 
+    const user = useSelector((state: any) => state.user)
     const users = useSelector((state: any) => state.users) || {}
     const messages = useSelector((state: any) => state.messages) || {}
     const subjects = useSelector((state: any) => state.subjects) || {}
 
+    /*
     useEffect(() => {
         if (Object.keys(messages).length > 0) {
             var sortedMessages = Object.values(messages).sort((m1: any, m2: any) => m2.sentDt - m1.sentDt)
@@ -54,6 +62,7 @@ export default () => {
             setActiveMessage(latestMessage)
         }
     }, [messages])
+    */
 
     return (
         <React.Fragment>
@@ -61,15 +70,27 @@ export default () => {
                 <Row style={{ height: '100%' }}>
                     <Col xs={ 4 } style={{ overflowY: 'scroll', height: '100%' }}>
                         {
-                            Object.keys(messages).map((id: any) => (
-                                <div key={ id } id={ messageIDPrefix + id } style={{ borderTop: "1px solid black", paddingTop: '8px' }}
-                                    onClick={ e => setActiveMessage(messages[e.currentTarget.id.substring(messageIDPrefixLen)]) }>
-                                    <b>{ ((subjects as { [name: string]: { [name: string]: string } })[messages[id].subjectID] || {}).name }</b>
-                                    <p>{ messages[id].body }</p>
-                                </div>
-                            ))
+                            Object.keys(users).map(function(id: any) {
+                                return (users?.email == user?.email) ? null : (
+                                    <div key={ id } id={ 'user-' + id } style={{ borderTop: "1px solid black", paddingTop: '8px' }}
+                                        onClick={
+                                            console.log
+                                            // e => setActiveMessage(messages[e.currentTarget.id.substring(messageIDPrefixLen)])
+                                        }>
+                                        <b>{
+                                            users[id].firstName + ' ' + users[id].lastName
+                                            //((subjects as { [name: string]: { [name: string]: string } })[messages[id].subjectID] || {}).name
+                                        }</b>
+                                        <p>{
+                                            'Hello world!'
+                                            //messages[id].body
+                                        }</p>
+                                    </div>
+                                )
+                            })
                         }
                     </Col>
+                    { /*
                     <Col xs={ 8 } style={{ overflowY: 'scroll', height: '100%', paddingTop: '8px' }}>
                         { activeMessage === null && <b>You have no messages to show.</b> }
                         { activeMessage !== null && 
@@ -83,6 +104,7 @@ export default () => {
                             </div>
                         }
                     </Col>
+                    */ }
                 </Row>
             </Container>
             
