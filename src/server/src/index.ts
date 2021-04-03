@@ -176,8 +176,65 @@ io.on('connection', (socket: any) => {
                 .then(async (decoded: any) => {
 
                     const user = await User.findOne({ email: decoded.email })
-                    const messages = await Message.find({})
 
+                    const chatMessagePipeline = Message.aggregate()
+                        .unwind('recipientUserID')
+                        .match({ $expr: { $or: [
+                                { $eq: [ '$fromUserID', user._id ] },
+                                { $eq: [ '$recipientUserID', user._id ] }
+                            ] } })
+                        .addFields({ 'otherUserID': {
+                            $cond: {
+                                if: { $eq: [ '$fromUserID', user._id ] },
+                                then: '$recipientUserID',
+                                else: '$fromUserID'
+                            } } })
+                        .pipeline()
+
+                    const chatUserPipeline = Message.aggregate(chatMessagePipeline)
+                        .group({ _id: '$otherUserID', sentDt: { $max: '$sentDt' } })
+                        .lookup({
+                            from: 'messages',
+                            let: { otherUserID: '$_id', sentDt: '$sentDt' },
+                            pipeline: Message.aggregate(chatMessagePipeline)
+                                .match({ $expr: { $and: [
+                                    { $eq: [ '$otherUserID', '$$otherUserID' ] },
+                                    { $eq: [ '$sentDt', '$$sentDt' ] }
+                                ]}})
+                                .limit(1)
+                                .pipeline(),
+                            as: 'message'
+                        })
+                        .unwind('message')
+                        .replaceRoot('$message')
+                        .pipeline()
+
+                    Message.watch(
+                        Message.aggregate()
+                            .match({ $expr: { $or: [
+                                { $eq: [ '$fullDocument.fromUserID', user._id ] },
+                                { $in: [ user._id, '$fullDocument.recipientUserID' ] }
+                            ]}})
+                            .pipeline()
+                        , { 'fullDocument': 'updateLookup' })
+                        .on('change', (e: any) => io.emit('chat-id-user-all-view', e.fullDocument))
+
+                    Message.aggregate(chatUserPipeline)
+                        .exec((err, result) => {
+                            if (err) {
+                                console.log(err)
+
+                                io.emit('error', {
+                                    type: 'chat-id-user-all-view',
+                                    result: err
+                                })
+                            }
+
+                            else
+                                io.emit('chat-id-user-all-view', result)
+                        })
+
+                    /*
                     const chatUserPipeline = Message.aggregate()
                         .unwind('recipientUserID')
                         .match({ '$or': [
@@ -185,18 +242,145 @@ io.on('connection', (socket: any) => {
                             { 'recipientUserID': { '$eq': user._id } }
                         ]})
                         .group({
-                            _id: '$_id',
-                            fromUserID: { '$first': '$fromUserID' },
+                            _id: '$fromUserID',
                             sendDt: { '$max': '$sentDt' }
                         })
+                        .lookup({
+                            from: 'messages',
+                            let: {
+                                'fromUserID': '$fromUserID',
+                                'sentDt': '$sentDt'
+                            },
+                            pipeline: [
+                                { $match:
+                                   { $expr:
+                                      { $and:
+                                         [
+                                           { $eq: [ "$fromUserID",  "$$fromUserID" ] },
+                                           { $gte: [ "$sentDt", "$$sentDt" ] }
+                                         ]
+                                      }
+                                   }
+                                },
+                                { $project: { fromUserID: 0, sentDt: 0 } }
+                             ],
+                             as: 'latestMessage'
+                        })
+                        .pipeline()
+*/
+
+/*
+
+                    const fromUserPipeline = Message.aggregate()
+                        .unwind('recipientUserID')
+                        .match({ 'fromUserID': user._id })
+                        .addFields({ 'otherUserID': '$recipientUserID' })
                         .pipeline()
 
-                    Message.aggregate(chatUserPipeline)
-                        .exec((err, result) => {
-                            console.log(err)
-                            console.log(result)
+                    const toUserPipeline = Message.aggregate()
+                        .unwind('recipientUserID')
+                        .match({ 'recipientUserID': user._id })
+                        .addFields({ 'otherUserID': '$fromUserID' })
+                        .pipeline()
+
+                    const allUserMessagePipeline = Message.aggregate()
+                        .append({
+                            $facet: {
+                                fromUserMessages: fromUserPipeline,
+                                toUserMessages: toUserPipeline
+                            }
                         })
+                        .addFields({
+                            message: {
+                                $concatArrays: [ '$fromUserMessages', '$toUserMessages' ]
+                            }
+                        })
+                        .unwind('message')
+                        .pipeline()
+
+                    const lookupMessageByUserDatePipeline =
+                        Message.aggregate(allUserMessagePipeline)
+                            .match({ $expr: { $and: [
+                                    { $eq: [ '$message.involvedUserID', '$$involvedUserID' ] },
+                                    { $eq: [ '$message.sentDt', '$$sentDt' ] }
+                                ] } })
+                            .pipeline()
+
+                    const chatUserPipeline = Message.aggregate(allUserMessagePipeline)
+                        .group({
+                            _id: '$message.otherUserID',
+                            sentDt: { $max: '$message.sentDt' }
+                        })
+                        .lookup({
+                            from: 'messages',
+                            let: { 
+                                involvedUserID: '$_id',
+                                sentDt: '$sentDt'
+                            },
+                            pipeline: lookupMessageByUserDatePipeline,
+                            as: 'message'
+                        })
+                        .unwind('message')
+                        .pipeline()
+*/
+
+                    
+
+/*
+                    const allMessagesPipeline = Message.aggregate().pipeline()
+
+                    const chatUserPipeline = Message.aggregate()
+                        //.group({ _id: '$fromUserID', messages: { $push: '$$ROOT' } })
+                        .replaceRoot({ $arrayToObject: [ [ {
+                            k: { $concat: [{ $toString: '$_id' }, { $toString: '$fromUserID' }] },
+                            v: '$$ROOT'
+                        } ] ] })
+                        .group({ _id: 'fromMessages', fromMessages: { $push: '$$ROOT' } })
+                        .addFields({ 'fromMessageMap': { $mergeObjects: '$fromMessages' } })
+                        .lookup({
+                            from: 'messages',
+                            pipeline: allMessagesPipeline,
+                            as: 'toMessage'
+                        })
+                        .unwind('toMessage')
+                        .unwind('toMessage.recipientUserID')
+                        .addFields({ 'toMessageMap': { $arrayToObject: [ [ {
+                            k: { $concat: [{ $toString: '$toMessage._id' }, { $toString: '$toMessage.recipientUserID' }] },
+                            v: '$$ROOT'
+                        } ] ] } })
+                        .group({
+                            _id: 'allMessages',
+                            toMessages: { $push: '$toMessageMap' },
+                            fromMessages: { $first: '$fromMessageMap' }
+                        })
+                        .addFields({ 'toMessageMap': { $mergeObjects: '$toMessages' }})
+                        .addFields({ allMessageMap: { $mergeObjects: [ '$toMessageMap', '$fromMessageMap' ]}})
+                        //.group({ _id: 'involvedUsers', IDs: { $push: '$$ROOT' } })
+                        //.replaceRoot({ 'involvedUsers': { $arrayToObject: [ [ { k: { $toString: '$fromUserID' }, v: '$recipientUserID' } ] ] }
+                        //)
+                        //.replaceRoot({ $mergeObjects: '$$ROOT' })
+                        
+                        .project({
+                            'involvedUserID': '$fromUserID',
+                            'otherUsers': '$recipientUserID'
+                        })
+                        .replaceRoot({ 'newRoot': {
+                                '$mergeObjects': [
+                                    { 'involvedUsers': '$$ROOT' },
+                                    { 'involvedUsers': { '$map': {
+                                        input: '$otherUsers',
+                                        as: 'otherUser',
+                                        in: { 'involvedUserID': '$otherUser' }
+                                    } } }
+                                ]
+                            } })
+                            
+                        .pipeline()
+*/
                 })
+
+        else
+            socket.emit('chat-id-user-all-view', null)
 
     })
 })

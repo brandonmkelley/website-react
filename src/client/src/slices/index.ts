@@ -10,8 +10,9 @@ import { ServiceContext } from '../'
 import { userSlice } from './user'
 import { subjectSlice } from './subject'
 import { messageSlice } from './message'
+import { chatSlice } from './chat'
 
-export const dataSlices = [ subjectSlice, userSlice, messageSlice ]
+export const dataSlices = [ subjectSlice, userSlice, messageSlice, chatSlice ]
 
 export class Subscriber {
     sid: string

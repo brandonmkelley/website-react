@@ -36,7 +36,9 @@ export default () => {
             subscribe(new Subscriber(userSid, 'subject-all'))
             subscribe(new Subscriber(userSid, 'message-all'))
 
-            socket.emit('chat-id-user-all-view', { sid: userSid })
+            subscribe(new Subscriber(userSid, 'chat-id-user-all-view'))
+
+            //socket.emit('chat-id-user-all-view', { sid: userSid })
         }
 
         return () => {
@@ -44,6 +46,8 @@ export default () => {
             unsubscribe('user-all')
             unsubscribe('subject-all')
             unsubscribe('message-all')
+
+            unsubscribe('chat-id-user-all-view')
         }
     }, [location.pathname, userSid])
 
@@ -51,6 +55,11 @@ export default () => {
     const users = useSelector((state: any) => state.users) || {}
     const messages = useSelector((state: any) => state.messages) || {}
     const subjects = useSelector((state: any) => state.subjects) || {}
+    const chat = useSelector((state: any) => state.chat)
+
+    useEffect(() => {
+        console.log(chat)
+    }, [chat])
 
     /*
     useEffect(() => {
