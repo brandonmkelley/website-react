@@ -1,6 +1,7 @@
 
 import * as mongoose from 'mongoose'
-import { isStringLiteral } from 'typescript';
+
+import { EventQuery } from './EventQuery'
 
 export interface IUser extends mongoose.Document {
     email: String,
@@ -8,6 +9,8 @@ export interface IUser extends mongoose.Document {
     lastName: String,
     createdUser: String
 }
+
+export interface DocType extends IUser { }
 
 const UserSchema = new mongoose.Schema<IUser>({
     email: { type: String },
@@ -18,4 +21,11 @@ const UserSchema = new mongoose.Schema<IUser>({
     timestamps: true
 });
 
-export default mongoose.model<IUser>('User', UserSchema);
+export const UserModel = mongoose.model<IUser>('User', UserSchema)
+
+export const model = UserModel
+
+const userViewQuery = new EventQuery<IUser>('user-view',
+    () => model.find({}))
+
+export const queries = [ userViewQuery ]

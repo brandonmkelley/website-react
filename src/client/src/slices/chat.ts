@@ -7,7 +7,7 @@ export const chatSlice = createSlice({
     name: 'chat',
     initialState: initialState,
     reducers: {
-        'id-user-all-view': (state: AppState, action: any) => {
+        'chat-view': (state: AppState, action: any) => {
             return ({ ...state, chat: action.payload })
         }
     }

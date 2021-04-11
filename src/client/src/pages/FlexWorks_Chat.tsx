@@ -32,22 +32,22 @@ export default () => {
 
         if (userSid) {
             subscribe(new Subscriber(userSid, 'user-id'))
-            subscribe(new Subscriber(userSid, 'user-all'))
+            subscribe(new Subscriber(userSid, 'user-view'))
             subscribe(new Subscriber(userSid, 'subject-all'))
             subscribe(new Subscriber(userSid, 'message-all'))
 
-            subscribe(new Subscriber(userSid, 'chat-id-user-all-view'))
+            subscribe(new Subscriber(userSid, 'chat-view'))
 
             //socket.emit('chat-id-user-all-view', { sid: userSid })
         }
 
         return () => {
             unsubscribe('user-id')
-            unsubscribe('user-all')
+            unsubscribe('user-view')
             unsubscribe('subject-all')
             unsubscribe('message-all')
 
-            unsubscribe('chat-id-user-all-view')
+            unsubscribe('chat-view')
         }
     }, [location.pathname, userSid])
 
@@ -58,8 +58,8 @@ export default () => {
     const chat = useSelector((state: any) => state.chat)
 
     useEffect(() => {
-        console.log(chat)
-    }, [chat])
+        console.log(users)
+    }, [users])
 
     /*
     useEffect(() => {

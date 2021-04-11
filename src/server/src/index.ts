@@ -53,26 +53,9 @@ import * as mongoose from 'mongoose'
 
 mongoose.connect('mongodb://localhost/flexworks?replicaSet=rs0', { useNewUrlParser: true, useUnifiedTopology: true })
 
-
-
-/*
-const userSchema = new mongoose.Schema({
-    email: String
-})
-
-const User = mongoose.model('users', userSchema)
-
-const subjectSchema = new mongoose.Schema({
-    id: Number,
-    name: String,
-    createdDt: String,
-    createdUser: String
-})
-
-const Subject = mongoose.model('subjects', subjectSchema)
-*/
-
 const db = mongoose.connection
+
+db.on('error', console.error.bind(console, 'Mongo connection error:'))
 
 import * as expressSession from 'express-session'
 import * as socketSession from 'express-socket.io-session'
@@ -93,10 +76,6 @@ app.use(appSession)
 
 io.use(socketSession(appSession))
 
-db.on('error', console.error.bind(console, 'Mongo connection error:'))
-
-//User.watch().on('change', console.log)
-
 var firebaseAdmin = require('firebase-admin');
 
 var firebaseAdminRef = firebaseAdmin.initializeApp({
@@ -104,10 +83,10 @@ credential: firebaseAdmin.credential.cert('./static/firebaseServiceAccount.json'
     databaseURL: 'https://userportal-fa7ab.firebaseio.com'
   }, 'ADMIN');
 
-import User, { IUser } from './models/User'
+// import User, { IUser } from './models/User'
 import Subject from './models/Subject'
-import Message, { IMessage } from './models/Message'
-import { ChangeEventUpdate, ObjectID } from "mongodb"
+import Message from './models/Message'
+import { ChangeEventUpdate } from "mongodb"
 
 function mapDBRowsToDictionary(rows: any[]) : any {
     return rows.reduce((r, i) => {
@@ -116,24 +95,63 @@ function mapDBRowsToDictionary(rows: any[]) : any {
     }, {})
 }
 
-User.watch().on('change', async _ =>
-    io.emit('user-all', mapDBRowsToDictionary(await User.find({}))))  
+// TODO: De-centralize this logic (out of this file.)
+// TODO: Standardize watch -> subscribe -> join -> change -> emit to pattern.
+import * as userModel from './models/User'
+
+const modelSubscriptions = [ userModel ]
+
+const User = userModel.model
+
+type IUser = userModel.IUser
+
+modelSubscriptions.map(m => {
+    m.queries.map(q => {
+        m.model.watch().on('change',
+            async _ => io.to(q.event).emit(q.event, await q.query(true)))
+    })
+})
+
+
+//User.watch().on('change', async _ =>
+//    io.to('user-view').emit('user-view', mapDBRowsToDictionary(await User.find({}))))
 
 Subject.watch().on('change', async _ =>
-    io.emit('subject-all', mapDBRowsToDictionary(await Subject.find({}))))
+    io.to('subject-view').emit('subject-view', mapDBRowsToDictionary(await Subject.find({}))))
 
 Message.watch().on('change', async _ =>
-    io.emit('message-all', mapDBRowsToDictionary(await Message.find({}))))
-    
-io.on('connection', (socket: any) => {
-    socket.on('user-all', async _ =>
-        io.emit('user-all', mapDBRowsToDictionary(await User.find({}))))
+    io.to('message-view').emit('message-view', mapDBRowsToDictionary(await Message.find({}))))
 
-    socket.on('subject-all', async _ =>
-        io.emit('subject-all', mapDBRowsToDictionary(await Subject.find({}))))
 
-    socket.on('message-all', async _ =>
-        io.emit('message-all', mapDBRowsToDictionary(await Message.find({}))))
+io.on('connection', socket => {
+/*
+    socket.on('user-view', async function() {
+        socket.emit('user-view', mapDBRowsToDictionary(await User.find({})))
+
+        socket.join('user-view')
+    })
+*/
+    modelSubscriptions.map(m => {
+        m.queries.map(q => {
+            socket.on(q.event, async function() {
+                socket.emit(q.event, await q.query(true))
+
+                socket.join(q.event)
+            })
+        })
+    })
+
+    socket.on('subject-view', async function() {
+        socket.emit('subject-view', mapDBRowsToDictionary(await Subject.find({})))
+
+        socket.join('subject-view')
+    })
+
+    socket.on('message-view', async function() {
+        socket.emit('message-view', mapDBRowsToDictionary(await Message.find({})))
+
+        socket.join('message-view')
+    })
     
     socket.off('user-id', console.log)
 
@@ -168,7 +186,7 @@ io.on('connection', (socket: any) => {
         await user.save()
     })
 
-    socket.on('chat-id-user-all-view', async (subscriber: any) => {
+    socket.on('chat-view', async (subscriber: any) => {
         // Experiment with SQL-like aggregate queries in MongoDB/Mongoose.
 
         if (subscriber && subscriber.sid)
@@ -233,240 +251,12 @@ io.on('connection', (socket: any) => {
                             else
                                 io.emit('chat-id-user-all-view', result)
                         })
-
-                    /*
-                    const chatUserPipeline = Message.aggregate()
-                        .unwind('recipientUserID')
-                        .match({ '$or': [
-                            { 'fromUserID': { '$eq': user._id } },
-                            { 'recipientUserID': { '$eq': user._id } }
-                        ]})
-                        .group({
-                            _id: '$fromUserID',
-                            sendDt: { '$max': '$sentDt' }
-                        })
-                        .lookup({
-                            from: 'messages',
-                            let: {
-                                'fromUserID': '$fromUserID',
-                                'sentDt': '$sentDt'
-                            },
-                            pipeline: [
-                                { $match:
-                                   { $expr:
-                                      { $and:
-                                         [
-                                           { $eq: [ "$fromUserID",  "$$fromUserID" ] },
-                                           { $gte: [ "$sentDt", "$$sentDt" ] }
-                                         ]
-                                      }
-                                   }
-                                },
-                                { $project: { fromUserID: 0, sentDt: 0 } }
-                             ],
-                             as: 'latestMessage'
-                        })
-                        .pipeline()
-*/
-
-/*
-
-                    const fromUserPipeline = Message.aggregate()
-                        .unwind('recipientUserID')
-                        .match({ 'fromUserID': user._id })
-                        .addFields({ 'otherUserID': '$recipientUserID' })
-                        .pipeline()
-
-                    const toUserPipeline = Message.aggregate()
-                        .unwind('recipientUserID')
-                        .match({ 'recipientUserID': user._id })
-                        .addFields({ 'otherUserID': '$fromUserID' })
-                        .pipeline()
-
-                    const allUserMessagePipeline = Message.aggregate()
-                        .append({
-                            $facet: {
-                                fromUserMessages: fromUserPipeline,
-                                toUserMessages: toUserPipeline
-                            }
-                        })
-                        .addFields({
-                            message: {
-                                $concatArrays: [ '$fromUserMessages', '$toUserMessages' ]
-                            }
-                        })
-                        .unwind('message')
-                        .pipeline()
-
-                    const lookupMessageByUserDatePipeline =
-                        Message.aggregate(allUserMessagePipeline)
-                            .match({ $expr: { $and: [
-                                    { $eq: [ '$message.involvedUserID', '$$involvedUserID' ] },
-                                    { $eq: [ '$message.sentDt', '$$sentDt' ] }
-                                ] } })
-                            .pipeline()
-
-                    const chatUserPipeline = Message.aggregate(allUserMessagePipeline)
-                        .group({
-                            _id: '$message.otherUserID',
-                            sentDt: { $max: '$message.sentDt' }
-                        })
-                        .lookup({
-                            from: 'messages',
-                            let: { 
-                                involvedUserID: '$_id',
-                                sentDt: '$sentDt'
-                            },
-                            pipeline: lookupMessageByUserDatePipeline,
-                            as: 'message'
-                        })
-                        .unwind('message')
-                        .pipeline()
-*/
-
-                    
-
-/*
-                    const allMessagesPipeline = Message.aggregate().pipeline()
-
-                    const chatUserPipeline = Message.aggregate()
-                        //.group({ _id: '$fromUserID', messages: { $push: '$$ROOT' } })
-                        .replaceRoot({ $arrayToObject: [ [ {
-                            k: { $concat: [{ $toString: '$_id' }, { $toString: '$fromUserID' }] },
-                            v: '$$ROOT'
-                        } ] ] })
-                        .group({ _id: 'fromMessages', fromMessages: { $push: '$$ROOT' } })
-                        .addFields({ 'fromMessageMap': { $mergeObjects: '$fromMessages' } })
-                        .lookup({
-                            from: 'messages',
-                            pipeline: allMessagesPipeline,
-                            as: 'toMessage'
-                        })
-                        .unwind('toMessage')
-                        .unwind('toMessage.recipientUserID')
-                        .addFields({ 'toMessageMap': { $arrayToObject: [ [ {
-                            k: { $concat: [{ $toString: '$toMessage._id' }, { $toString: '$toMessage.recipientUserID' }] },
-                            v: '$$ROOT'
-                        } ] ] } })
-                        .group({
-                            _id: 'allMessages',
-                            toMessages: { $push: '$toMessageMap' },
-                            fromMessages: { $first: '$fromMessageMap' }
-                        })
-                        .addFields({ 'toMessageMap': { $mergeObjects: '$toMessages' }})
-                        .addFields({ allMessageMap: { $mergeObjects: [ '$toMessageMap', '$fromMessageMap' ]}})
-                        //.group({ _id: 'involvedUsers', IDs: { $push: '$$ROOT' } })
-                        //.replaceRoot({ 'involvedUsers': { $arrayToObject: [ [ { k: { $toString: '$fromUserID' }, v: '$recipientUserID' } ] ] }
-                        //)
-                        //.replaceRoot({ $mergeObjects: '$$ROOT' })
-                        
-                        .project({
-                            'involvedUserID': '$fromUserID',
-                            'otherUsers': '$recipientUserID'
-                        })
-                        .replaceRoot({ 'newRoot': {
-                                '$mergeObjects': [
-                                    { 'involvedUsers': '$$ROOT' },
-                                    { 'involvedUsers': { '$map': {
-                                        input: '$otherUsers',
-                                        as: 'otherUser',
-                                        in: { 'involvedUserID': '$otherUser' }
-                                    } } }
-                                ]
-                            } })
-                            
-                        .pipeline()
-*/
                 })
 
         else
-            socket.emit('chat-id-user-all-view', null)
+            socket.emit('chat-view', null)
 
     })
-})
-
-// User.find((err: any, users: any) => console.log(users))
-
-/*
-// Test connection
-db.once('open', function() {
-  // we're connected!
-    console.log('connected')
-
-    User.find((err: any, users: any) => console.log(users))
-
-    User.watch().on('change', console.log)
-});
-*/
-
-io.on('connection', (socket: any) => {
-/*
-    socket.on('write-user', (user: any) =>
-        User.findById(user._id, (err: any, doc: mongoose.Document) => {
-            doc.set('email', user.email)
-            doc.save()
-        }))
-*/
-
-/*
-    socket.on('read-page-app', (context) => {
-        if (context && context.sid)
-            firebaseAdminRef.auth().verifyIdToken(context.sid)
-                .then(decoded => {
-                    //console.log(decoded)
-
-                    User.find((err: any, users: any) => socket.emit('read-user-list', users))
-                })
-        else
-            socket.emit('read-user-list', [])
-    })
-    */
-
-    // Legacy: create user in Firebase auth syncing from client back to MongoDB.
-    /*
-    socket.on('insert-user', (context) => {
-        if (context && context.sid)
-            firebaseAdminRef.auth().verifyIdToken(context.sid)
-                .then(decoded => {
-                    User.create({ email: context.email }, (err, _) => {
-                        // Definitely replace this with a change stream listener.
-                        User.find((err: any, users: any) => socket.broadcast.emit('read-user-list', users))
-                    })
-                })
-    })
-    */
-
-    //socket.on('patch-user')
-
-    /*
-    socket.on('delete-user', (context) => {
-        if (context && context.sid)
-            firebaseAdminRef.auth().verifyIdToken(context.sid)
-                .then(decoded => {
-		// User.findOneAndRemove({ email: context.email }, () => {
-                        // Definitely replace this with a change stream listener.
-			//        User.find((err: any, users: any) => socket.broadcast.emit('read-user-list', users))
-			// })
-                })
-    })
-    */
-})
-
-app.get('/api/trigger-subject-all', (req, res) => {
-    io.emit('subject-all', {
-        "1": {
-            "name": "This is NEW thread 1",
-            "createdDt": "2021-02-01T00:00:00.000Z",
-            "createdUser": "1"
-        },
-        "2": {
-            "name": "This is NEW thread 2",
-            "createdDt": "2021-02-05T00:00:00.000Z",
-            "createdUser": "2"
-        }
-    })
-
-    res.end('trigger on subject-all successful.')
 })
 
 

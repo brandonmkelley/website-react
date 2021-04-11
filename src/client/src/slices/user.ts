@@ -7,7 +7,7 @@ export const userSlice = createSlice({
     name: 'user',
     initialState: initialState,
     reducers: {
-        all: (state: AppState, action: any) => {
+        view: (state: AppState, action: any) => {
             return ({ ...state, users: action.payload })
         },
         id: (state: AppState, action: any) => {
