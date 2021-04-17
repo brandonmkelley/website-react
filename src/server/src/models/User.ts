@@ -10,8 +10,6 @@ export interface IUser extends mongoose.Document {
     createdUser: String
 }
 
-export interface DocType extends IUser { }
-
 const UserSchema = new mongoose.Schema<IUser>({
     email: { type: String },
     firstName: { type: String },

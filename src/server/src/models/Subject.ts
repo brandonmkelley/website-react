@@ -1,6 +1,8 @@
 
 import * as mongoose from 'mongoose'
 
+import { EventQuery } from './EventQuery'
+
 export interface ISubject extends mongoose.Document {
     name: { type: String },
     createdUser: { type: String, required: true }
@@ -13,4 +15,11 @@ const SubjectSchema = new mongoose.Schema<ISubject>({
     timestamps: true
 });
 
-export default mongoose.model<ISubject>('Subject', SubjectSchema);
+export const SubjectModel = mongoose.model<ISubject>('Subject', SubjectSchema)
+
+export const model = SubjectModel
+
+const subjectViewQuery = new EventQuery<ISubject>('subject-view',
+    () => model.find({}))
+
+export const queries = [ subjectViewQuery ]

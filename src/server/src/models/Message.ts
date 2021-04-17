@@ -1,6 +1,8 @@
 
 import * as mongoose from 'mongoose'
 
+import { EventQuery } from './EventQuery'
+
 import { IUser } from './user'
 import { ISubject } from './subject'
 
@@ -29,4 +31,11 @@ const MessageSchema = new mongoose.Schema<IMessage>({
     timestamps: true
 });
 
-export default mongoose.model<IMessage>('Message', MessageSchema);
+export const MessageModel = mongoose.model<IMessage>('Message', MessageSchema)
+
+export const model = MessageModel
+
+const messageViewQuery = new EventQuery<IMessage>('message-view',
+    () => model.find({}))
+
+export const queries = [ messageViewQuery ]

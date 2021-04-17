@@ -11,25 +11,47 @@ import { Container } from 'react-bootstrap'
 
 import { layoutSlice } from '../slices/layout'
 
+import useDatabaseSubscription, { Subscriber } from '../slices'
+import { ServiceContext } from '..'
+
 const messageIDPrefix = 'message-id-'
 const messageIDPrefixLen = messageIDPrefix.length
 
 export default () => {
     const dispatch = useDispatch()
     const location = useLocation()
+
+    const { subscribe, unsubscribe } = useDatabaseSubscription()
+
+    const userSid: string | null | undefined = useSelector((state: any) => state.userSid) || {}
+
     const [activeMessage, setActiveMessage] = useState<any>(null)
 
     useEffect(() => {
         dispatch(layoutSlice.actions.desktopNoScroll())
-    }, [dispatch, location])
 
-    useEffect(() => {
-        console.log('open email data feeds.')
+        if (typeof(userSid) === 'string') {
+            //console.log('open email data feeds.')
+
+            subscribe(new Subscriber(userSid, 'user-id'))
+            subscribe(new Subscriber(userSid, 'user-view'))
+            subscribe(new Subscriber(userSid, 'subject-view'))
+            subscribe(new Subscriber(userSid, 'message-view'))
+
+            subscribe(new Subscriber(userSid, 'chat-view'))
+        }
 
         return () => {
-            console.log('close email data feeds.')
+            //console.log('close email data feeds.')
+
+            unsubscribe('user-id')
+            unsubscribe('user-view')
+            unsubscribe('subject-view')
+            unsubscribe('message-view')
+
+            unsubscribe('chat-view')
         }
-    }, [location.pathname])
+    }, [location.pathname, userSid])
 
     const users = useSelector((state: any) => state.users) || {}
     const messages = useSelector((state: any) => state.messages) || {}
@@ -48,7 +70,7 @@ export default () => {
             <Container fluid={ true } style={{ width: '100%', height: '100%' }}>
                 <Row style={{ height: '100%' }}>
                     <Col xs={ 4 } style={{ overflowY: 'scroll', height: '100%' }}>
-                        {
+                        {   messages && subjects &&
                             Object.keys(messages).map((id: any) => (
                                 <div key={ id } id={ messageIDPrefix + id } style={{ borderTop: "1px solid black", paddingTop: '8px' }}
                                     onClick={ e => setActiveMessage(messages[e.currentTarget.id.substring(messageIDPrefixLen)]) }>
@@ -60,7 +82,7 @@ export default () => {
                     </Col>
                     <Col xs={ 8 } style={{ overflowY: 'scroll', height: '100%', paddingTop: '8px' }}>
                         { activeMessage === null && <b>You have no messages to show.</b> }
-                        { activeMessage !== null && 
+                        { activeMessage !== null &&
                             <div>
                                 <h2 style={{ marginBottom: '16px' }}>{ subjects[activeMessage!.subjectID].name }</h2>
                                 <p>From: Katie Taylor &lt;katiemtaylor@whatever.net&gt;<br/>

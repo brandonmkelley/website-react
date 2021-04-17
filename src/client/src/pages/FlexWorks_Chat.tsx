@@ -14,14 +14,9 @@ import { layoutSlice } from '../slices/layout'
 import useDatabaseSubscription, { Subscriber } from '../slices'
 import { ServiceContext } from '..'
 
-const messageIDPrefix = 'message-id-'
-const messageIDPrefixLen = messageIDPrefix.length
-
 export default () => {
     const dispatch = useDispatch()
     const location = useLocation()
-    const { socket } = useContext(ServiceContext)
-    const [activeMessage, setActiveMessage] = useState<any>(null)
 
     const { subscribe, unsubscribe } = useDatabaseSubscription()
 
@@ -30,22 +25,20 @@ export default () => {
     useEffect(() => {
         dispatch(layoutSlice.actions.desktopNoScroll())
 
-        if (userSid) {
+        if (typeof(userSid) === 'string') {
             subscribe(new Subscriber(userSid, 'user-id'))
             subscribe(new Subscriber(userSid, 'user-view'))
-            subscribe(new Subscriber(userSid, 'subject-all'))
-            subscribe(new Subscriber(userSid, 'message-all'))
+            subscribe(new Subscriber(userSid, 'subject-view'))
+            subscribe(new Subscriber(userSid, 'message-view'))
 
             subscribe(new Subscriber(userSid, 'chat-view'))
-
-            //socket.emit('chat-id-user-all-view', { sid: userSid })
         }
 
         return () => {
             unsubscribe('user-id')
             unsubscribe('user-view')
-            unsubscribe('subject-all')
-            unsubscribe('message-all')
+            unsubscribe('subject-view')
+            unsubscribe('message-view')
 
             unsubscribe('chat-view')
         }
@@ -56,10 +49,6 @@ export default () => {
     const messages = useSelector((state: any) => state.messages) || {}
     const subjects = useSelector((state: any) => state.subjects) || {}
     const chat = useSelector((state: any) => state.chat)
-
-    useEffect(() => {
-        console.log(users)
-    }, [users])
 
     /*
     useEffect(() => {

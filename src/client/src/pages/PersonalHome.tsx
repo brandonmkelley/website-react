@@ -15,7 +15,7 @@ export default () => {
 
     useEffect(() => {
         dispatch(layoutSlice.actions.desktopWithScroll())
-    }, [location])
+    }, [location.pathname])
 
     return (
         <React.Fragment>
@@ -25,7 +25,6 @@ export default () => {
                 "<i>We can only see a short distance ahead, but we can see plenty there that needs to be done.</i>"
                 <br/>~ Alan Turing
             </div>
-
 
             <div className="bg-light" style={{ width: "100%" }}>
                 <div className="container text-justify pt-5 pb-5">

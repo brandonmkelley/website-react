@@ -83,25 +83,16 @@ credential: firebaseAdmin.credential.cert('./static/firebaseServiceAccount.json'
     databaseURL: 'https://userportal-fa7ab.firebaseio.com'
   }, 'ADMIN');
 
-// import User, { IUser } from './models/User'
-import Subject from './models/Subject'
-import Message from './models/Message'
 import { ChangeEventUpdate } from "mongodb"
 
-function mapDBRowsToDictionary(rows: any[]) : any {
-    return rows.reduce((r, i) => {
-        r[i.id] = i
-        return r
-    }, {})
-}
-
-// TODO: De-centralize this logic (out of this file.)
-// TODO: Standardize watch -> subscribe -> join -> change -> emit to pattern.
 import * as userModel from './models/User'
+import * as subjectModel from './models/Subject'
+import * as messageModel from './models/Message'
 
-const modelSubscriptions = [ userModel ]
+const modelSubscriptions = [ userModel, subjectModel, messageModel ]
 
 const User = userModel.model
+const Message = messageModel.model
 
 type IUser = userModel.IUser
 
@@ -112,54 +103,26 @@ modelSubscriptions.map(m => {
     })
 })
 
-
-//User.watch().on('change', async _ =>
-//    io.to('user-view').emit('user-view', mapDBRowsToDictionary(await User.find({}))))
-
-Subject.watch().on('change', async _ =>
-    io.to('subject-view').emit('subject-view', mapDBRowsToDictionary(await Subject.find({}))))
-
-Message.watch().on('change', async _ =>
-    io.to('message-view').emit('message-view', mapDBRowsToDictionary(await Message.find({}))))
-
-
 io.on('connection', socket => {
-/*
-    socket.on('user-view', async function() {
-        socket.emit('user-view', mapDBRowsToDictionary(await User.find({})))
 
-        socket.join('user-view')
-    })
-*/
     modelSubscriptions.map(m => {
         m.queries.map(q => {
             socket.on(q.event, async function() {
-                socket.emit(q.event, await q.query(true))
+                const result = await q.query(true)
+                socket.emit(q.event, result)
 
                 socket.join(q.event)
             })
         })
     })
 
-    socket.on('subject-view', async function() {
-        socket.emit('subject-view', mapDBRowsToDictionary(await Subject.find({})))
-
-        socket.join('subject-view')
-    })
-
-    socket.on('message-view', async function() {
-        socket.emit('message-view', mapDBRowsToDictionary(await Message.find({})))
-
-        socket.join('message-view')
-    })
-    
     socket.off('user-id', console.log)
 
     // Should accept EITHER subscriber or payload
     socket.on('user-id', async (subscriber: any) => {
         //console.log(subscriber)
 
-        if (subscriber && subscriber.sid)
+        if (subscriber && typeof(subscriber.sid) == 'string')
             firebaseAdminRef.auth().verifyIdToken(subscriber.sid)
                 .then(async (decoded: any) => {
                     //console.log(decoded)
@@ -189,7 +152,7 @@ io.on('connection', socket => {
     socket.on('chat-view', async (subscriber: any) => {
         // Experiment with SQL-like aggregate queries in MongoDB/Mongoose.
 
-        if (subscriber && subscriber.sid)
+        if (subscriber && typeof(subscriber.sid) == 'string')
             firebaseAdminRef.auth().verifyIdToken(subscriber.sid)
                 .then(async (decoded: any) => {
 
