@@ -88,8 +88,11 @@ import { ChangeEventUpdate } from "mongodb"
 import * as userModel from './models/User'
 import * as subjectModel from './models/Subject'
 import * as messageModel from './models/Message'
+import * as chatModel from './models/Chat'
 
-const modelSubscriptions = [ userModel, subjectModel, messageModel ]
+import { EventQuery } from './models/EventQuery'
+
+const modelSubscriptions = [ userModel, subjectModel, messageModel, chatModel ]
 
 const User = userModel.model
 const Message = messageModel.model
@@ -97,21 +100,80 @@ const Message = messageModel.model
 type IUser = userModel.IUser
 
 modelSubscriptions.map(m => {
-    m.queries.map(q => {
-        m.model.watch().on('change',
-            async _ => io.to(q.event).emit(q.event, await q.query(true)))
+    // This nastiness will allow all queries to watch their base models.
+    m.queries.map((q: EventQuery<any>) => {
+        q.baseModel.watch().on('change',
+            (e: ChangeEventUpdate<mongoose.Model<any>>) => {
+                const watchContext = {}
+                watchContext[q.event] = e.documentKey
+
+                Object.values(io.to(q.event).sockets).map(async s => {
+                    const result = await q.exec(s.handshake.session, watchContext)
+
+                    if (result)
+                        s.emit(q.event, result)
+                })
+                    
+            })                
+
+        // Added nastiness for queries that watch OTHER models as well...
+        //q.sensitivityList.map(other => {
+        //})
     })
 })
 
+/*
+modelSubscriptions.map(m => {
+    m.queries.map(q => {
+        m.model.watch().on('change',
+            async _ => io.to(q.event).emit(q.event, await q.query()))
+    })
+})
+*/
+
+
+
 io.on('connection', socket => {
 
+    /*
     modelSubscriptions.map(m => {
         m.queries.map(q => {
             socket.on(q.event, async function() {
-                const result = await q.query(true)
+                const result = await q.query()
                 socket.emit(q.event, result)
 
                 socket.join(q.event)
+            })
+        })
+    })
+    */
+
+    modelSubscriptions.map(m => {
+        m.queries.map(q => {
+            socket.on(q.event, async function(subscriber: any) {
+                if (socket.handshake.session.user) {
+                    const result = await q.exec(socket.handshake.session)
+
+                    if (result)
+                        socket.emit(q.event, result)
+
+                    socket.join(q.event)
+                }
+
+                else if (subscriber && typeof(subscriber.sid) == 'string')
+                    firebaseAdminRef.auth().verifyIdToken(subscriber.sid)
+                        .then(async (decoded: any) => {
+                            const user = await User.findOne({ email: decoded.email })
+                            socket.handshake.session.user = user
+                            socket.handshake.session.save()
+
+                            const result = await q.exec(socket.handshake.session)
+
+                            if (result)
+                                socket.emit(q.event, result)
+
+                            socket.join(q.event)
+                        })
             })
         })
     })
@@ -127,7 +189,12 @@ io.on('connection', socket => {
                 .then(async (decoded: any) => {
                     //console.log(decoded)
 
-                    socket.emit('user-id', await User.findOne({ email: decoded.email }))
+                    const user = await User.findOne({ email: decoded.email })
+
+                    socket.emit('user-id', user)
+
+                    socket.handshake.session.user = user
+                    socket.handshake.session.save()
 
                     const userIdPipeline = User.aggregate()
                         .match({ 'fullDocument.email': decoded.email })
@@ -148,7 +215,7 @@ io.on('connection', socket => {
 
         await user.save()
     })
-
+/*
     socket.on('chat-view', async (subscriber: any) => {
         // Experiment with SQL-like aggregate queries in MongoDB/Mongoose.
 
@@ -220,6 +287,7 @@ io.on('connection', socket => {
             socket.emit('chat-view', null)
 
     })
+    */
 })
 
 

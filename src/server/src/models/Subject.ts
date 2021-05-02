@@ -19,7 +19,11 @@ export const SubjectModel = mongoose.model<ISubject>('Subject', SubjectSchema)
 
 export const model = SubjectModel
 
+/*
 const subjectViewQuery = new EventQuery<ISubject>('subject-view',
     () => model.find({}))
+*/
 
-export const queries = [ subjectViewQuery ]
+const baseQuery = new EventQuery('subject-view', model)
+
+export const queries = [ baseQuery ]

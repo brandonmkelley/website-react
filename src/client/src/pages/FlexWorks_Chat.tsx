@@ -24,7 +24,9 @@ export default () => {
 
     useEffect(() => {
         dispatch(layoutSlice.actions.desktopNoScroll())
+    }, [location.pathname])
 
+    useEffect(() => {
         if (typeof(userSid) === 'string') {
             subscribe(new Subscriber(userSid, 'user-id'))
             subscribe(new Subscriber(userSid, 'user-view'))
@@ -42,13 +44,17 @@ export default () => {
 
             unsubscribe('chat-view')
         }
-    }, [location.pathname, userSid])
+    }, [ userSid, location.pathname ])
 
     const user = useSelector((state: any) => state.user)
     const users = useSelector((state: any) => state.users) || {}
     const messages = useSelector((state: any) => state.messages) || {}
     const subjects = useSelector((state: any) => state.subjects) || {}
     const chat = useSelector((state: any) => state.chat)
+
+    useEffect(() => {
+        console.log(chat)
+    }, [chat])
 
     /*
     useEffect(() => {

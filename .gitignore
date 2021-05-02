@@ -1,5 +1,5 @@
 
-db
+db/data
 node_modules
 
 src/client/package-lock.json

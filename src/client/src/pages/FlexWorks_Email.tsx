@@ -29,7 +29,9 @@ export default () => {
 
     useEffect(() => {
         dispatch(layoutSlice.actions.desktopNoScroll())
+    }, [location.pathname])
 
+    useEffect(() => {
         if (typeof(userSid) === 'string') {
             //console.log('open email data feeds.')
 
@@ -37,7 +39,6 @@ export default () => {
             subscribe(new Subscriber(userSid, 'user-view'))
             subscribe(new Subscriber(userSid, 'subject-view'))
             subscribe(new Subscriber(userSid, 'message-view'))
-
             subscribe(new Subscriber(userSid, 'chat-view'))
         }
 
@@ -48,10 +49,9 @@ export default () => {
             unsubscribe('user-view')
             unsubscribe('subject-view')
             unsubscribe('message-view')
-
             unsubscribe('chat-view')
         }
-    }, [location.pathname, userSid])
+    }, [userSid, location.pathname])
 
     const users = useSelector((state: any) => state.users) || {}
     const messages = useSelector((state: any) => state.messages) || {}
@@ -70,7 +70,7 @@ export default () => {
             <Container fluid={ true } style={{ width: '100%', height: '100%' }}>
                 <Row style={{ height: '100%' }}>
                     <Col xs={ 4 } style={{ overflowY: 'scroll', height: '100%' }}>
-                        {   messages && subjects &&
+                        {   Object.keys(messages).length && Object.keys(subjects).length &&
                             Object.keys(messages).map((id: any) => (
                                 <div key={ id } id={ messageIDPrefix + id } style={{ borderTop: "1px solid black", paddingTop: '8px' }}
                                     onClick={ e => setActiveMessage(messages[e.currentTarget.id.substring(messageIDPrefixLen)]) }>

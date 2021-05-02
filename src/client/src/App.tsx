@@ -40,7 +40,7 @@ export default function() {
       else
         dispatch(authSlice.actions.onAuthStateChanged({ email: null, sid: null }))
     })
-  })
+  }, [ firebaseApp ])
 
   const navHeight = useSelector((state: any) => state.layoutNavHeight) || ''
   const appHeight = useSelector((state: any) => state.layoutAppHeight) || ''

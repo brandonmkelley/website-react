@@ -35,7 +35,11 @@ export const MessageModel = mongoose.model<IMessage>('Message', MessageSchema)
 
 export const model = MessageModel
 
-const messageViewQuery = new EventQuery<IMessage>('message-view',
+/*
+export const baseQuery = new EventQuery<IMessage>('message-view',
     () => model.find({}))
+*/
 
-export const queries = [ messageViewQuery ]
+export const baseQuery = new EventQuery('message-view', model)
+
+export const queries = [ baseQuery ]

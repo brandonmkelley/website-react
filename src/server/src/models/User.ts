@@ -23,7 +23,11 @@ export const UserModel = mongoose.model<IUser>('User', UserSchema)
 
 export const model = UserModel
 
+/*
 const userViewQuery = new EventQuery<IUser>('user-view',
     () => model.find({}))
+*/
 
-export const queries = [ userViewQuery ]
+export const baseQuery = new EventQuery('user-view', model)
+
+export const queries = [ baseQuery ]
