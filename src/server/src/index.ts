@@ -91,6 +91,7 @@ import * as messageModel from './models/Message'
 import * as chatModel from './models/Chat'
 
 import { EventQuery } from './models/EventQuery'
+import SocketIO = require("socket.io")
 
 const modelSubscriptions = [ userModel, subjectModel, messageModel, chatModel ]
 
@@ -110,8 +111,18 @@ modelSubscriptions.map(m => {
                 Object.values(io.to(q.event).sockets).map(async s => {
                     const result = await q.exec(s.handshake.session, watchContext)
 
-                    if (result)
-                        s.emit(q.event, result)
+                    if (result) {
+                        const response = {
+                            apimeta: {
+                                scope: e.operationType,
+                                query: q.event,
+                                _id: e.documentKey._id
+                            },
+                            data: result
+                        }
+
+                        s.emit(q.event, response)
+                    }
                 })
                     
             })                
@@ -122,43 +133,31 @@ modelSubscriptions.map(m => {
     })
 })
 
-/*
-modelSubscriptions.map(m => {
-    m.queries.map(q => {
-        m.model.watch().on('change',
-            async _ => io.to(q.event).emit(q.event, await q.query()))
-    })
-})
-*/
+async function subscribeSessionToQuery(socket: SocketIO.Socket, query: EventQuery<any>) {
+    const result = await query.exec(socket.handshake.session)
 
+    if (result) {
+        const response = {
+            apimeta: {
+                scope: 'none',
+                query: query.event
+            },
+            data: result
+        }
 
+        socket.emit(query.event, response)
+    }
+
+    socket.join(query.event)
+}
 
 io.on('connection', socket => {
-
-    /*
-    modelSubscriptions.map(m => {
-        m.queries.map(q => {
-            socket.on(q.event, async function() {
-                const result = await q.query()
-                socket.emit(q.event, result)
-
-                socket.join(q.event)
-            })
-        })
-    })
-    */
 
     modelSubscriptions.map(m => {
         m.queries.map(q => {
             socket.on(q.event, async function(subscriber: any) {
-                if (socket.handshake.session.user) {
-                    const result = await q.exec(socket.handshake.session)
-
-                    if (result)
-                        socket.emit(q.event, result)
-
-                    socket.join(q.event)
-                }
+                if (socket.handshake.session.user)
+                    subscribeSessionToQuery(socket, q)
 
                 else if (subscriber && typeof(subscriber.sid) == 'string')
                     firebaseAdminRef.auth().verifyIdToken(subscriber.sid)
@@ -167,12 +166,7 @@ io.on('connection', socket => {
                             socket.handshake.session.user = user
                             socket.handshake.session.save()
 
-                            const result = await q.exec(socket.handshake.session)
-
-                            if (result)
-                                socket.emit(q.event, result)
-
-                            socket.join(q.event)
+                            subscribeSessionToQuery(socket, q)
                         })
             })
         })
@@ -215,79 +209,6 @@ io.on('connection', socket => {
 
         await user.save()
     })
-/*
-    socket.on('chat-view', async (subscriber: any) => {
-        // Experiment with SQL-like aggregate queries in MongoDB/Mongoose.
-
-        if (subscriber && typeof(subscriber.sid) == 'string')
-            firebaseAdminRef.auth().verifyIdToken(subscriber.sid)
-                .then(async (decoded: any) => {
-
-                    const user = await User.findOne({ email: decoded.email })
-
-                    const chatMessagePipeline = Message.aggregate()
-                        .unwind('recipientUserID')
-                        .match({ $expr: { $or: [
-                                { $eq: [ '$fromUserID', user._id ] },
-                                { $eq: [ '$recipientUserID', user._id ] }
-                            ] } })
-                        .addFields({ 'otherUserID': {
-                            $cond: {
-                                if: { $eq: [ '$fromUserID', user._id ] },
-                                then: '$recipientUserID',
-                                else: '$fromUserID'
-                            } } })
-                        .pipeline()
-
-                    const chatUserPipeline = Message.aggregate(chatMessagePipeline)
-                        .group({ _id: '$otherUserID', sentDt: { $max: '$sentDt' } })
-                        .lookup({
-                            from: 'messages',
-                            let: { otherUserID: '$_id', sentDt: '$sentDt' },
-                            pipeline: Message.aggregate(chatMessagePipeline)
-                                .match({ $expr: { $and: [
-                                    { $eq: [ '$otherUserID', '$$otherUserID' ] },
-                                    { $eq: [ '$sentDt', '$$sentDt' ] }
-                                ]}})
-                                .limit(1)
-                                .pipeline(),
-                            as: 'message'
-                        })
-                        .unwind('message')
-                        .replaceRoot('$message')
-                        .pipeline()
-
-                    Message.watch(
-                        Message.aggregate()
-                            .match({ $expr: { $or: [
-                                { $eq: [ '$fullDocument.fromUserID', user._id ] },
-                                { $in: [ user._id, '$fullDocument.recipientUserID' ] }
-                            ]}})
-                            .pipeline()
-                        , { 'fullDocument': 'updateLookup' })
-                        .on('change', (e: any) => io.emit('chat-id-user-all-view', e.fullDocument))
-
-                    Message.aggregate(chatUserPipeline)
-                        .exec((err, result) => {
-                            if (err) {
-                                console.log(err)
-
-                                io.emit('error', {
-                                    type: 'chat-id-user-all-view',
-                                    result: err
-                                })
-                            }
-
-                            else
-                                io.emit('chat-id-user-all-view', result)
-                        })
-                })
-
-        else
-            socket.emit('chat-view', null)
-
-    })
-    */
 })
 
 

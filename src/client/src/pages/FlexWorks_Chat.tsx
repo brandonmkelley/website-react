@@ -53,6 +53,22 @@ export default () => {
     const chat = useSelector((state: any) => state.chat)
 
     useEffect(() => {
+        console.log('users update:')
+        console.log(users)
+    }, [users])
+
+    useEffect(() => {
+        console.log('messages update:')
+        console.log(messages)
+    }, [messages])
+
+    useEffect(() => {
+        console.log('subjects update:')
+        console.log(subjects)
+    }, [subjects])
+
+    useEffect(() => {
+        console.log('chats update:')
         console.log(chat)
     }, [chat])
 
