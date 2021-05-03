@@ -52,38 +52,6 @@ export default () => {
     const subjects = useSelector((state: any) => state.subjects) || {}
     const chat = useSelector((state: any) => state.chat)
 
-    useEffect(() => {
-        console.log('users update:')
-        console.log(users)
-    }, [users])
-
-    useEffect(() => {
-        console.log('messages update:')
-        console.log(messages)
-    }, [messages])
-
-    useEffect(() => {
-        console.log('subjects update:')
-        console.log(subjects)
-    }, [subjects])
-
-    useEffect(() => {
-        console.log('chats update:')
-        console.log(chat)
-    }, [chat])
-
-    /*
-    useEffect(() => {
-        if (Object.keys(messages).length > 0) {
-            var sortedMessages = Object.values(messages).sort((m1: any, m2: any) => m2.sentDt - m1.sentDt)
-            var latestMessage = sortedMessages[0]
-            
-            // Is the active item a user or a subject or a user group???
-            setActiveMessage(latestMessage)
-        }
-    }, [messages])
-    */
-
     return (
         <React.Fragment>
             <Container fluid={ true } style={{ width: '100%', height: '100%' }}>
@@ -91,7 +59,7 @@ export default () => {
                     <Col xs={ 4 } style={{ overflowY: 'scroll', height: '100%' }}>
                         {
                             Object.keys(users).map(function(id: any) {
-                                return (users?.email == user?.email) ? null : (
+                                return (users[id]?.email == user?.email) ? null : (
                                     <div key={ id } id={ 'user-' + id } style={{ borderTop: "1px solid black", paddingTop: '8px' }}
                                         onClick={
                                             console.log

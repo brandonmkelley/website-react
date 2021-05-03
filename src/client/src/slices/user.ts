@@ -26,11 +26,10 @@ export const userSlice = createSlice({
                 return ({ ...state, users: action.payload })
             }
             */
-
-            return ({ ...state, users: action.payload })
+            return ({ ...state, users: action.payload.data })
         },
         id: (state: AppState, action: any) => {
-            return ({ ...state, user: action.payload })
+            return ({ ...state, user: action.payload.data })
         }
     }
 })

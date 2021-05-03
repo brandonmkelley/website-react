@@ -8,7 +8,7 @@ export const messageSlice = createSlice({
     initialState: initialState,
     reducers: {
         view: (state: AppState, action: any) => {
-            return ({ ...state, messages: action.payload })
+            return ({ ...state, messages: action.payload.data })
         }
     }
 })
