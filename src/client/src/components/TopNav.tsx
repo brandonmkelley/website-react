@@ -84,7 +84,7 @@ export default function(params: TopNavParams) {
     const signOut = () => {
         firebase.auth(firebaseApp).signOut()
     }
-
+    
     const padToHeight = Math.floor((parseInt(params.height) - 40) / 2);
 
     return (

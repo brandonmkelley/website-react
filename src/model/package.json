@@ -1,0 +1,23 @@
+{
+  "name": "model",
+  "version": "1.0.0",
+  "description": "Data model shared between client and server.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brandonmkelley/website-react.git"
+  },
+  "author": "Brandon M. Kelley",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brandonmkelley/website-react/issues"
+  },
+  "homepage": "https://github.com/brandonmkelley/website-react#readme",
+  "dependencies": {
+    "@types/mongoose": "^5.10.5",
+    "mongoose": "^5.12.7"
+  }
+}

@@ -3,12 +3,7 @@ import * as mongoose from 'mongoose'
 
 import { EventQuery } from './EventQuery'
 
-export interface IUser extends mongoose.Document {
-    email: String,
-    firstName: String,
-    lastName: String,
-    createdUser: String
-}
+import { IUser } from '../../../model/src/IUser'
 
 const UserSchema = new mongoose.Schema<IUser>({
     email: { type: String },
@@ -22,11 +17,6 @@ const UserSchema = new mongoose.Schema<IUser>({
 export const UserModel = mongoose.model<IUser>('User', UserSchema)
 
 export const model = UserModel
-
-/*
-const userViewQuery = new EventQuery<IUser>('user-view',
-    () => model.find({}))
-*/
 
 export const baseQuery = new EventQuery('user-view', model)
 

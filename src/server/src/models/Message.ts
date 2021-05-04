@@ -3,8 +3,8 @@ import * as mongoose from 'mongoose'
 
 import { EventQuery } from './EventQuery'
 
-import { IUser } from './user'
-import { ISubject } from './subject'
+import { IUser } from '../../../model/src/IUser'
+import { ISubject } from '../../../model/src/ISubject'
 
 export interface IMessage extends mongoose.Document {
     subjectId: ISubject['_id'],

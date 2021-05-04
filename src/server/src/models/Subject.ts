@@ -3,10 +3,7 @@ import * as mongoose from 'mongoose'
 
 import { EventQuery } from './EventQuery'
 
-export interface ISubject extends mongoose.Document {
-    name: { type: String },
-    createdUser: { type: String, required: true }
-}
+import { ISubject } from '../../../model/src/ISubject'
 
 const SubjectSchema = new mongoose.Schema<ISubject>({
     name: { type: String },
