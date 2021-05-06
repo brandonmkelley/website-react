@@ -85,6 +85,8 @@ credential: firebaseAdmin.credential.cert('./static/firebaseServiceAccount.json'
 
 import { ChangeEventUpdate } from "mongodb"
 
+import { IUser } from '../../model/src/IUser'
+
 import * as userModel from './models/User'
 import * as subjectModel from './models/Subject'
 import * as messageModel from './models/Message'
@@ -97,8 +99,6 @@ const modelSubscriptions = [ userModel, subjectModel, messageModel, chatModel ]
 
 const User = userModel.model
 const Message = messageModel.model
-
-type IUser = userModel.IUser
 
 modelSubscriptions.map(m => {
     // This nastiness will allow all queries to watch their base models.
@@ -185,7 +185,18 @@ io.on('connection', socket => {
 
                     const user = await User.findOne({ email: decoded.email })
 
-                    socket.emit('user-id', user)
+                    //console.log(user)
+
+                    const response = {
+                        apimeta: {
+                            scope: 'none',
+                            query: 'user-id',
+                            _id: user._id
+                        },
+                        data: user
+                    }
+                    
+                    socket.emit('user-id', response)
 
                     socket.handshake.session.user = user
                     socket.handshake.session.save()
@@ -196,7 +207,19 @@ io.on('connection', socket => {
                         .pipeline()
 
                     User.watch(userIdPipeline, { 'fullDocument': 'updateLookup' })
-                        .on('change', (e: ChangeEventUpdate<mongoose.Model<IUser>>) => io.emit('user-id', e.fullDocument))
+                        .on('change', (e: ChangeEventUpdate<mongoose.Model<IUser>>) =>
+                            {
+                                const response = {
+                                    apimeta: {
+                                        scope: e.operationType,
+                                        query: 'user-id',
+                                        _id: e.documentKey._id
+                                    },
+                                    data: e.fullDocument
+                                }
+
+                                io.emit('user-id', response)
+                            })
                 })
         else
             socket.emit('user-id', null)

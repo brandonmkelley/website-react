@@ -52,10 +52,6 @@ export default () => {
     const subjects = useSelector((state: any) => state.subjects) || {}
     const chat = useSelector((state: any) => state.chat)
 
-    useEffect(() => {
-        console.log(users)
-    }, [users])
-
     return (
         <React.Fragment>
             <Container fluid={ true } style={{ width: '100%', height: '100%' }}>

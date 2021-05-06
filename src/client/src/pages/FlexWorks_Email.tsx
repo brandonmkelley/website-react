@@ -58,12 +58,12 @@ export default () => {
     const subjects = useSelector((state: any) => state.subjects) || {}
 
     useEffect(() => {
-        if (Object.keys(messages).length > 0) {
+        if (Object.keys(messages).length && Object.keys(subjects).length) {
             var sortedMessages = Object.values(messages).sort((m1: any, m2: any) => m2.sentDt - m1.sentDt)
             var latestMessage = sortedMessages[0]
             setActiveMessage(latestMessage)
         }
-    }, [messages])
+    }, [messages, subjects])
 
     return (
         <React.Fragment>

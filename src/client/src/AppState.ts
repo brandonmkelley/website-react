@@ -1,7 +1,7 @@
 
 import { IUser } from '../../model/src/IUser'
-//import { ISubject } from '../../model/src/ISubject'
-//import { IMessage } from '../../model/src/IMessage'
+import { ISubject } from '../../model/src/ISubject'
+import { IMessage } from '../../model/src/IMessage'
 
 export interface AppState {
     layoutPlatform?: string | null,
@@ -10,10 +10,10 @@ export interface AppState {
     layoutCardHeight?: string | null,
     userEmail?: string | null,
     userSid?: string | null,
-    user?: object | null,
+    user?: IUser | null,
     users?: Record<string, IUser> | null,
-    subjects?: object | null,
-    messages?: object | null
+    subjects?: Record<string, ISubject> | null,
+    messages?: Record<string, IMessage> | null
 }
 
 export const initialState : AppState = {
