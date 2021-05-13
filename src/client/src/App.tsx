@@ -12,6 +12,9 @@ import Col from 'react-bootstrap/Col'
 
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
+import 'devextreme/dist/css/dx.common.css'
+import 'devextreme/dist/css/dx.light.css'
+
 import TopNav from './components/TopNav'
 
 import PersonalHome from './pages/PersonalHome'
