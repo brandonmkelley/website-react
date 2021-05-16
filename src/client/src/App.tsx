@@ -20,6 +20,8 @@ import TopNav from './components/TopNav'
 import PersonalHome from './pages/PersonalHome'
 
 import { authSlice } from './slices/auth'
+
+import Config_Content from './pages/Config_Content'
 import FlexWorks_Chat from './pages/FlexWorks_Chat'
 import FlexWorks_Email from './pages/FlexWorks_Email'
 import FlexWorks_Account from './pages/FlexWorks_Account'
@@ -55,6 +57,7 @@ export default function() {
         <div style={{ height: appHeight, width: '100%' }}>
           <Switch>
             <Route exact path="/" component={ PersonalHome }/>
+            <Route exact path="/config/content" component={ Config_Content }/>
             <Route exact path="/flexworks/chat" component={ FlexWorks_Chat }/>
             <Route exact path="/flexworks/email" component={ FlexWorks_Email }/>
             <Route exact path="/flexworks/account" component={ FlexWorks_Account }/>

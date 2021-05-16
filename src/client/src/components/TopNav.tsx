@@ -86,6 +86,7 @@ export default function(params: TopNavParams) {
     }
     
     const padToHeight = Math.floor((parseInt(params.height) - 40) / 2);
+    const includeProducts = false
 
     return (
         <Navbar bg="transparent" variant="light" expand="lg" style={{ paddingTop: padToHeight, paddingBottom: padToHeight }}>
@@ -93,8 +94,13 @@ export default function(params: TopNavParams) {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                    
-                    { userEmail &&
+                    { userEmail && userEmail == 'brandonmkelley@outlook.com' &&
+                        <NavDropdown title="Config" id="configDropDown">
+                            <Nav.Link as={Link} to="/config/content">Content</Nav.Link>
+                        </NavDropdown>
+                    }
+
+                    { includeProducts && userEmail &&
                         <NavDropdown title="Products" id="productsDropDown">
                             <NavDropdown title="FlexWorks" id="flexWorksDropDown">
                                 <Nav.Link as={Link} to="/flexworks/chat">Chat</Nav.Link>
@@ -103,7 +109,7 @@ export default function(params: TopNavParams) {
                         </NavDropdown>
                     }
 
-                    { userEmail && 
+                    { includeProducts && userEmail && 
                         <span className="fa fa-envelope p-1" style={{ fontSize: '16px' }}></span>
                     }
                     

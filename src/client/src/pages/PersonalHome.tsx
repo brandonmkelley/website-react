@@ -23,22 +23,25 @@ export default () => {
 
             <div className="container text-center pt-5 pb-5" style={{ fontSize: "1.4rem" }}>
                 "<i>We can only see a short distance ahead, but we can see plenty there that needs to be done.</i>"
-                <br/>~ Alan Turing
+                <br/><br/>
+                <span style={{ fontSize: '1.2rem' }}>Alan Turing in <i>Computing Machinery and Intelligence</i></span>
+                <br/>
+                <span style={{ fontSize: '1rem' }}><span>Turing, A. M. (1950). Computing Machinery and Intelligence. Mind, 59, 433–460. </span>
+                    <a target="_blank" href="https://doi.org/10.1093/mind/LIX.236.433">https://doi.org/10.1093/mind/LIX.236.433</a></span>
             </div>
 
             <div className="bg-light" style={{ width: "100%" }}>
                 <div className="container text-justify pt-5 pb-5">
-                    Hello! Thank you for visiting my website. I am an engineer, friend, and innovator in the tech industry.
-                    I received a <b>B.S. in Computer Engineering</b> at California Polytechnic State University in
+                    Hello! Thank you for visiting my website. I am an engineer, friend, and problem solver in the solar industry.
+                    I received my <b>B.S. in Computer Engineering</b> at California Polytechnic State University in
                     San Luis Obispo, California, with culminating work in <b>advanced computer architecture</b> and <b>human-computer
-                    interaction</b>. I currently work as a Systems Analyst / Developer 
-                    at <a href="https://recsolar.com/" target="_blank">REC Solar Commercial Corporation</a>.
-                    I collaborate with peers to address societal problems through research and the application of modern
-                    technology. My favorite hobbies include playing guitar, networking, and changing my lifestyle.
-                    Please feel free to connect with me.
+                    interaction</b>. I currently work as a Renewables Data Analyst in the Sustainable Solutions group
+                    at the <a href="https://sustainablesolutions.duke-energy.com/" target="_blank">Duke Energy Corporation</a>.
+                    I collaborate with peers to address contemporary issues with research and the application of advanced
+                    technology. My favorite hobbies include reading, playing guitar, and changing my lifestyle.
+                    Please feel free to reach out and connect with me.
                 </div>
             </div>
-
 
             <div className="container">
                 <div className="row">
@@ -58,8 +61,7 @@ export default () => {
                         </ul>
                         <h4>Work Experience</h4>
                         <ul>
-                            <li>REC Solar Commercial Corporation</li>
-                            <li>Stellar Exploration, Inc.</li>
+                            <li>Duke Energy Corporation</li>
                             <li>Cal Poly Corporation</li>
                             <li>Microsoft Corporation</li>
                         </ul>
@@ -67,11 +69,11 @@ export default () => {
                     <div className="col-12 col-md-6 col-lg-4 pt-md-5 pb-3">
                         <h4>Projects</h4>
                         <ul>
+                            <li>Solar site performance monitoring</li>
                             <li>FPGA processor using RiSC-16 ISA</li>
                             <li>Pipelining and prediction architectures</li>
                             <li>FMCW embedded radar processing</li>
-                            <li>Autonomous robotics courseware</li>
-                            <li>Augmented autonomous robotics</li>
+                            <li>Robotics &amp; augmented environments</li>
                             <li>LTE security in automotive applications</li>
                         </ul>
                         <h4>Resources</h4>
@@ -92,8 +94,7 @@ export default () => {
                     <div className="col-12 col-md-6 col-lg-4 pt-md-5 pb-md-3">
                         <h4>Team Involvement</h4>
                         <ul>
-                            <li>Scientific Cal Ag</li>
-                            <li>Cal Poly Computer Engineering Dept.</li>
+                            <li>Cal Poly Computer Engineering Dept</li>
                             <li>HackingEDU</li>
                             <li>SLO Hacks</li>
                             <li>Sigma Phi Delta Engineering Fraternity</li>
@@ -110,8 +111,9 @@ export default () => {
                         <ul>
                             <li>Seattle, WA</li>
                             <li>Whidbey Island, WA</li>
-                            <li>San Luis Obispo, CA</li>
                             <li>Bay Area, CA</li>
+                            <li>San Luis Obispo, CA</li>
+                            <li>Orange County, CA (current)</li>
                         </ul>
                         <h4>Online</h4>
                         <div>
@@ -133,33 +135,33 @@ export default () => {
                     <div className="col-12 col-md-6 col-lg-4 pt-md-5 pb-md-3">
                         <h4>Readings</h4>
                         <ul>
-                            <li>Contemporary Moral Problems</li>
-                            <li>Self, Media, and Society</li>
-                            <li><i>Sick: A Memoir</i>, Porochista Khakpour</li>
-                            <li><i>Hit Refresh</i>, Satya Nadella</li>
-                            <li><i>Mountains Beyond Mountains</i>, Tracy Kidder</li>
+                            <li><i>Factfulness</i>, Hans Rosling</li>
+                            <li><i>The Hitchhiker's Guide to the Galaxy</i>, Douglas Adams</li>
+                            <li><i>A Life in Parts</i>, Bryan Cranston</li>
+                            <li><i>Anxious People</i>, Fredrik Backman</li>
+                            <li><i>Zen and the Art of Motorcycle Maintanence</i>, Robert Pirsig</li>
                         </ul>
                         <h4>Writings</h4>
                         <ul>
                             <li>Research</li>
-                            <li>Selected assignments</li>
-                            <li>Technology</li>
+                            <li>Selected work</li>
                         </ul>
                     </div>
                     <div className="col-12 col-md-6 col-lg-4 pt-md-5 pb-3">
+                        <h4>Media influences</h4>
+                        <ul>
+                            <li>National Public Radio (NPR)</li>
+                            <li>Saturday Night Live (SNL)</li>
+                            <li>Last Week Tonight with John Oliver</li>
+                        </ul>
                         <h4>Lifestyle</h4>
                         <ul>
                             <li>Musical interests and performance</li>
+                            <li>Streaming and filmography</li>
+                            <li>E-Sports and online gaming</li>
                             <li>Water and material conservation</li>
-                            <li>Eating vegan</li>
-                            <li>Engineering personal productivity</li>
-                        </ul>
-                        <h4>Media influences</h4>
-                        <ul>
-                            <li>Trevor Noah</li>
-                            <li>John Oliver</li>
-                            <li>National Public Radio (NPR)</li>
-                            <li>Wall Street Journal</li>
+                            <li>Responsible diet, unique meals</li>
+                            <li>Personal productivity</li>
                         </ul>
                     </div>
                 </div>
