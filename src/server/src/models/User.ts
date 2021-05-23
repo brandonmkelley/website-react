@@ -9,7 +9,11 @@ const UserSchema = new mongoose.Schema<IUser>({
     email: { type: String },
     firstName: { type: String },
     lastName: { type: String },
-    createdUser: { type: String, required: true }
+    
+    updatedBy: { type: String, required: true },
+    updatedAt: { type: Date, required: true },
+    createdBy: { type: String, required: true },
+    createdAt: { type: Date, required: true }
 }, {
     timestamps: true
 });

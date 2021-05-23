@@ -55,14 +55,14 @@ export default () => {
         <React.Fragment>
             <Container fluid={ true } style={{ width: '100%', height: '100%' }}>
                 <Row style={{ height: '100%' }}>
-                    <Col xs={ 12 } style={{ overflowY: 'scroll', height: '100%' }}>
+                    <Col xs={ 12 } style={{ overflowY: 'scroll', height: '100%', paddingTop: '15px' }}>
                         
                         <DataGrid
                             dataSource={
                                 new DataSource({
                                     store: new ArrayStore({
                                         key: '_id',
-                                        data: content
+                                        data: Object.values(content)
                                     })
                                 })
                             }
@@ -76,10 +76,11 @@ export default () => {
                             <Column dataField="_id" caption="ID" allowEditing={false}/>
                             <Column dataField="topic" caption="Topic"/>
                             <Column dataField="name" caption="Name" />
-                            <Column dataField="modifiedby" caption="Modified By" allowEditing={false} />
-                            <Column dataField="modifiedat" caption="Modified At" allowEditing={false}
+                            <Column dataField="updatedBy" caption="Updated By" allowEditing={false} />
+                            <Column dataField="updatedAt" caption="Updated At" allowEditing={false}
                                 dataType="date" format='shortDateShortTime' />
-                            <Column dataField="createdat" caption="Created At" allowEditing={false}
+                            <Column dataField="createdBy" caption="Created By" allowEditing={false} />
+                            <Column dataField="createdAt" caption="Created At" allowEditing={false}
                                 dataType="date" format='shortDateShortTime' />
 
                             <Pager allowedPageSizes={pageSizes} showPageSizeSelector={true} />

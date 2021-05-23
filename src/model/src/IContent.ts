@@ -1,10 +1,9 @@
 
 import { Document } from 'mongoose'
 
-export interface IUser extends Document {
-    email: String,
-    firstName: String,
-    lastName: String,
+export interface IContent extends Document {
+    topic: String,
+    name: String,
     
     updatedBy: String,
     updatedAt: Date,

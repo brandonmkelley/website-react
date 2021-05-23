@@ -2,6 +2,7 @@
 import { IUser } from '../../model/src/IUser'
 import { ISubject } from '../../model/src/ISubject'
 import { IMessage } from '../../model/src/IMessage'
+import { IContent } from '../../model/src/IContent'
 
 export interface AppState {
     layoutPlatform?: string | null,
@@ -13,7 +14,8 @@ export interface AppState {
     user?: IUser | null,
     users?: Record<string, IUser> | null,
     subjects?: Record<string, ISubject> | null,
-    messages?: Record<string, IMessage> | null
+    messages?: Record<string, IMessage> | null,
+    content?: Record<string, IContent> | null
 }
 
 export const initialState : AppState = {
@@ -26,5 +28,6 @@ export const initialState : AppState = {
     user: null,
     users: {},
     messages: {},
-    subjects: {}
+    subjects: {},
+    content: {}
 }

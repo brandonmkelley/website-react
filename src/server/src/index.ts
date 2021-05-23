@@ -91,11 +91,12 @@ import * as userModel from './models/User'
 import * as subjectModel from './models/Subject'
 import * as messageModel from './models/Message'
 import * as chatModel from './models/Chat'
+import * as contentModel from './models/Content'
 
 import { EventQuery } from './models/EventQuery'
 import SocketIO = require("socket.io")
 
-const modelSubscriptions = [ userModel, subjectModel, messageModel, chatModel ]
+const modelSubscriptions = [ userModel, subjectModel, messageModel, chatModel, contentModel ]
 
 const User = userModel.model
 const Message = messageModel.model

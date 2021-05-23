@@ -11,8 +11,9 @@ import { userSlice } from './user'
 import { subjectSlice } from './subject'
 import { messageSlice } from './message'
 import { chatSlice } from './chat'
+import { contentSlice } from './content'
 
-export const dataSlices = [ subjectSlice, userSlice, messageSlice, chatSlice ]
+export const dataSlices = [ subjectSlice, userSlice, messageSlice, chatSlice, contentSlice ]
 
 export class Subscriber {
     sid: string

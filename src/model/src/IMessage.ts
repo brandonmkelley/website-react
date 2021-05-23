@@ -11,5 +11,9 @@ export interface IMessage extends Document {
     recipientUserID: [IUser['_id']],
     informationalUserID: [IUser['_id']],
     sentDt: Date,
-    createdUser: String
+    
+    updatedBy: String,
+    updatedAt: Date,
+    createdBy: String,
+    createdAt: Date
 }

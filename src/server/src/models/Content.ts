@@ -3,11 +3,12 @@ import * as mongoose from 'mongoose'
 
 import { EventQuery } from './EventQuery'
 
-import { ISubject } from '../../../model/src/ISubject'
+import { IContent } from '../../../model/src/IContent'
 
-const SubjectSchema = new mongoose.Schema<ISubject>({
+const ContentSchema = new mongoose.Schema<IContent>({
+    topic: { type: String },
     name: { type: String },
-    
+
     updatedBy: { type: String, required: true },
     updatedAt: { type: Date, required: true },
     createdBy: { type: String, required: true },
@@ -16,15 +17,15 @@ const SubjectSchema = new mongoose.Schema<ISubject>({
     timestamps: true
 });
 
-export const SubjectModel = mongoose.model<ISubject>('Subject', SubjectSchema)
+export const ContentModel = mongoose.model<IContent>('Content', ContentSchema)
 
-export const model = SubjectModel
+export const model = ContentModel
 
 /*
-const subjectViewQuery = new EventQuery<ISubject>('subject-view',
+export const baseQuery = new EventQuery<IMessage>('message-view',
     () => model.find({}))
 */
 
-const baseQuery = new EventQuery('subject-view', model)
+export const baseQuery = new EventQuery('content-view', model)
 
 export const queries = [ baseQuery ]

@@ -5,19 +5,28 @@ const usersToPopulate = [
         email: 'brandonmkelley@outlook.com',
         firstName: 'Brandon',
         lastName: 'Kelley',
-        createdUser: 'brandonmkelley@outlook.com'
+        updatedBy: 'brandonmkelley@outlook.com',
+        updatedAt: Date.now,
+        createdBy: 'brandonmkelley@outlook.com',
+        createdAt: Date.now
     },
     {
         email: '14bmkelley@gmail.com',
         firstName: 'Brandon',
         lastName: 'Kelley (Other)',
-        createdUser: 'brandonmkelley@outlook.com'
+        updatedBy: 'brandonmkelley@outlook.com',
+        updatedAt: Date.now,
+        createdBy: 'brandonmkelley@outlook.com',
+        createdAt: Date.now
     },
     {
         email: 'katiemtaylor@cox.net',
         firstName: 'Katie',
         lastName: 'Taylor',
-        createdUser: 'brandonmkelley@outlook.com'
+        updatedBy: 'brandonmkelley@outlook.com',
+        updatedAt: Date.now,
+        createdBy: 'brandonmkelley@outlook.com',
+        createdAt: Date.now
     }
 ]
 
@@ -32,14 +41,18 @@ const userIds = usersToPopulate.reduce((result, item) => {
 
 const subjectsToPopulate = [
     {
-        "name": "This is thread 1",
-        "createdDt": "2021-02-01T00:00:00.000Z",
-        "createdUser": userIds[1]
+        name: "This is thread 1",
+        updatedBy: userIds[1],
+        updatedAt: Date.now,
+        createdBy: userIds[1],
+        createdAt: Date.now
     },
     {
-        "name": "This is thread 2",
-        "createdDt": "2021-02-05T00:00:00.000Z",
-        "createdUser": userIds[2]
+        name: "This is thread 2",
+        updatedBy: userIds[2],
+        updatedAt: Date.now,
+        createdBy: userIds[2],
+        createdAt: Date.now
     }
 ]
 
@@ -58,7 +71,11 @@ const messagesToPopulate = [
         "fromUserID": userIds[0],
         "recipientUserID": [userIds[2]],
         "informationalUserID": [userIds[1]],
-        "sentDt": "2021-02-01T00:00:00.000Z"
+        "sentDt": "2021-02-01T00:00:00.000Z",
+        updatedBy: userIds[0],
+        updatedAt: Date.now,
+        createdBy: userIds[0],
+        createdAt: Date.now
     },
     {
         "subjectID": subjectIds[0],
@@ -66,7 +83,11 @@ const messagesToPopulate = [
         "fromUserID": userIds[2],
         "recipientUserID": [userIds[0]],
         "informationalUserID": [userIds[1]],
-        "sentDt": "2021-02-02T00:00:00.000Z"
+        "sentDt": "2021-02-02T00:00:00.000Z",
+        updatedBy: userIds[2],
+        updatedAt: Date.now,
+        createdBy: userIds[2],
+        createdAt: Date.now
     },
     {
         "subjectID": subjectIds[0],
@@ -74,7 +95,11 @@ const messagesToPopulate = [
         "fromUserID": userIds[2],
         "recipientUserID": [userIds[0]],
         "informationalUserID": [],
-        "sentDt": "2021-02-03T00:00:00.000Z"
+        "sentDt": "2021-02-03T00:00:00.000Z",
+        updatedBy: userIds[2],
+        updatedAt: Date.now,
+        createdBy: userIds[2],
+        createdAt: Date.now
     },
     {
         "subjectID": subjectIds[1],
@@ -82,7 +107,11 @@ const messagesToPopulate = [
         "fromUserID": userIds[1],
         "recipientUserID": [userIds[0]],
         "informationalUserID": [],
-        "sentDt": "2021-02-04T00:00:00.000Z"
+        "sentDt": "2021-02-04T00:00:00.000Z",
+        updatedBy: userIds[1],
+        updatedAt: Date.now,
+        createdBy: userIds[1],
+        createdAt: Date.now
     },
     {
         "subjectID": subjectIds[0],
@@ -90,7 +119,11 @@ const messagesToPopulate = [
         "fromUserID": userIds[2],
         "recipientUserID": [userIds[0]],
         "informationalUserID": [],
-        "sentDt": "2021-02-05T00:00:00.000Z"
+        "sentDt": "2021-02-05T00:00:00.000Z",
+        updatedBy: userIds[2],
+        updatedAt: Date.now,
+        createdBy: userIds[2],
+        createdAt: Date.now
     },
     {
         "subjectID": subjectIds[1],
@@ -98,8 +131,34 @@ const messagesToPopulate = [
         "fromUserID": userIds[2],
         "recipientUserID": [userIds[1]],
         "informationalUserID": [],
-        "sentDt": "2021-02-06T00:00:00.000Z"
+        "sentDt": "2021-02-06T00:00:00.000Z",
+        updatedBy: userIds[2],
+        updatedAt: Date.now,
+        createdBy: userIds[2],
+        createdAt: Date.now
     }
 ]
 
 db.messages.insert(messagesToPopulate)
+
+
+const contentToPopulate = [
+    {
+        topic: 'Engineering',
+        name: 'Computer Architecture',
+        updatedBy: userIds[0],
+        updatedAt: Date.now,
+        createdBy: userIds[0],
+        createdAt: Date.now
+    },
+    {
+        topic: 'Engineering',
+        name: 'Human-Computer Interaction',
+        updatedBy: userIds[0],
+        updatedAt: Date.now,
+        createdBy: userIds[0],
+        createdAt: Date.now
+    }
+]
+
+db.contents.insert(contentToPopulate)

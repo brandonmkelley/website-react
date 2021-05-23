@@ -3,18 +3,7 @@ import * as mongoose from 'mongoose'
 
 import { EventQuery } from './EventQuery'
 
-import { IUser } from '../../../model/src/IUser'
-import { ISubject } from '../../../model/src/ISubject'
-
-export interface IMessage extends mongoose.Document {
-    subjectId: ISubject['_id'],
-    body: String,
-    fromUserID: IUser['_id'],
-    recipientUserID: [IUser['_id']],
-    informationalUserID: [IUser['_id']],
-    sentDt: Date,
-    createdUser: String
-}
+import { IMessage } from '../../../model/src/IMessage'
 
 const MessageSchema = new mongoose.Schema<IMessage>({
     email: { type: String },
@@ -26,7 +15,11 @@ const MessageSchema = new mongoose.Schema<IMessage>({
     recipientUserID: { type: [mongoose.Schema.Types.ObjectId] },
     informationalUserID: { type: [mongoose.Schema.Types.ObjectId] },
     sentDt: Date,
-    createdUser: { type: String, required: true }
+    
+    updatedBy: { type: String, required: true },
+    updatedAt: { type: Date, required: true },
+    createdBy: { type: String, required: true },
+    createdAt: { type: Date, required: true }
 }, {
     timestamps: true
 });

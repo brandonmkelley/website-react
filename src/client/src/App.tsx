@@ -49,6 +49,7 @@ export default function() {
 
   const navHeight = useSelector((state: any) => state.layoutNavHeight) || ''
   const appHeight = useSelector((state: any) => state.layoutAppHeight) || ''
+  const userEmail = useSelector((state: any) => state.userEmail)
 
   return (
     <BrowserRouter>
@@ -57,7 +58,8 @@ export default function() {
         <div style={{ height: appHeight, width: '100%' }}>
           <Switch>
             <Route exact path="/" component={ PersonalHome }/>
-            <Route exact path="/config/content" component={ Config_Content }/>
+            { userEmail && userEmail == 'brandonmkelley@outlook.com' && 
+              <Route exact path="/config/content" component={ Config_Content }/> }
             <Route exact path="/flexworks/chat" component={ FlexWorks_Chat }/>
             <Route exact path="/flexworks/email" component={ FlexWorks_Email }/>
             <Route exact path="/flexworks/account" component={ FlexWorks_Account }/>
