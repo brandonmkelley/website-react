@@ -100,6 +100,10 @@ export default function(params: TopNavParams) {
                         </NavDropdown>
                     }
 
+                    { userEmail &&
+                        <Nav.Link as={Link} to="/calendar">Calendar</Nav.Link>
+                    }
+
                     { includeProducts && userEmail &&
                         <NavDropdown title="Products" id="productsDropDown">
                             <NavDropdown title="FlexWorks" id="flexWorksDropDown">

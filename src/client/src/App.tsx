@@ -22,6 +22,7 @@ import PersonalHome from './pages/PersonalHome'
 import { authSlice } from './slices/auth'
 
 import Config_Content from './pages/Config_Content'
+import PersonalCalendar from './pages/PersonalCalendar'
 import FlexWorks_Chat from './pages/FlexWorks_Chat'
 import FlexWorks_Email from './pages/FlexWorks_Email'
 import FlexWorks_Account from './pages/FlexWorks_Account'
@@ -60,6 +61,8 @@ export default function() {
             <Route exact path="/" component={ PersonalHome }/>
             { userEmail && userEmail == 'brandonmkelley@outlook.com' && 
               <Route exact path="/config/content" component={ Config_Content }/> }
+            { userEmail &&
+              <Route exact path="/calendar" component={ PersonalCalendar }/> }
             <Route exact path="/flexworks/chat" component={ FlexWorks_Chat }/>
             <Route exact path="/flexworks/email" component={ FlexWorks_Email }/>
             <Route exact path="/flexworks/account" component={ FlexWorks_Account }/>

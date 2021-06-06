@@ -6,27 +6,27 @@ const usersToPopulate = [
         firstName: 'Brandon',
         lastName: 'Kelley',
         updatedBy: 'brandonmkelley@outlook.com',
-        updatedAt: Date.now,
+        updatedAt: Date.now(),
         createdBy: 'brandonmkelley@outlook.com',
-        createdAt: Date.now
+        createdAt: Date.now()
     },
     {
         email: '14bmkelley@gmail.com',
         firstName: 'Brandon',
         lastName: 'Kelley (Other)',
         updatedBy: 'brandonmkelley@outlook.com',
-        updatedAt: Date.now,
+        updatedAt: Date.now(),
         createdBy: 'brandonmkelley@outlook.com',
-        createdAt: Date.now
+        createdAt: Date.now()
     },
     {
         email: 'katiemtaylor@cox.net',
         firstName: 'Katie',
         lastName: 'Taylor',
         updatedBy: 'brandonmkelley@outlook.com',
-        updatedAt: Date.now,
+        updatedAt: Date.now(),
         createdBy: 'brandonmkelley@outlook.com',
-        createdAt: Date.now
+        createdAt: Date.now()
     }
 ]
 
@@ -43,16 +43,16 @@ const subjectsToPopulate = [
     {
         name: "This is thread 1",
         updatedBy: userIds[1],
-        updatedAt: Date.now,
+        updatedAt: Date.now(),
         createdBy: userIds[1],
-        createdAt: Date.now
+        createdAt: Date.now()
     },
     {
         name: "This is thread 2",
         updatedBy: userIds[2],
-        updatedAt: Date.now,
+        updatedAt: Date.now(),
         createdBy: userIds[2],
-        createdAt: Date.now
+        createdAt: Date.now()
     }
 ]
 
@@ -73,9 +73,9 @@ const messagesToPopulate = [
         "informationalUserID": [userIds[1]],
         "sentDt": "2021-02-01T00:00:00.000Z",
         updatedBy: userIds[0],
-        updatedAt: Date.now,
+        updatedAt: Date.now(),
         createdBy: userIds[0],
-        createdAt: Date.now
+        createdAt: Date.now()
     },
     {
         "subjectID": subjectIds[0],
@@ -85,9 +85,9 @@ const messagesToPopulate = [
         "informationalUserID": [userIds[1]],
         "sentDt": "2021-02-02T00:00:00.000Z",
         updatedBy: userIds[2],
-        updatedAt: Date.now,
+        updatedAt: Date.now(),
         createdBy: userIds[2],
-        createdAt: Date.now
+        createdAt: Date.now()
     },
     {
         "subjectID": subjectIds[0],
@@ -97,9 +97,9 @@ const messagesToPopulate = [
         "informationalUserID": [],
         "sentDt": "2021-02-03T00:00:00.000Z",
         updatedBy: userIds[2],
-        updatedAt: Date.now,
+        updatedAt: Date.now(),
         createdBy: userIds[2],
-        createdAt: Date.now
+        createdAt: Date.now()
     },
     {
         "subjectID": subjectIds[1],
@@ -109,9 +109,9 @@ const messagesToPopulate = [
         "informationalUserID": [],
         "sentDt": "2021-02-04T00:00:00.000Z",
         updatedBy: userIds[1],
-        updatedAt: Date.now,
+        updatedAt: Date.now(),
         createdBy: userIds[1],
-        createdAt: Date.now
+        createdAt: Date.now()
     },
     {
         "subjectID": subjectIds[0],
@@ -121,9 +121,9 @@ const messagesToPopulate = [
         "informationalUserID": [],
         "sentDt": "2021-02-05T00:00:00.000Z",
         updatedBy: userIds[2],
-        updatedAt: Date.now,
+        updatedAt: Date.now(),
         createdBy: userIds[2],
-        createdAt: Date.now
+        createdAt: Date.now()
     },
     {
         "subjectID": subjectIds[1],
@@ -133,9 +133,9 @@ const messagesToPopulate = [
         "informationalUserID": [],
         "sentDt": "2021-02-06T00:00:00.000Z",
         updatedBy: userIds[2],
-        updatedAt: Date.now,
+        updatedAt: Date.now(),
         createdBy: userIds[2],
-        createdAt: Date.now
+        createdAt: Date.now()
     }
 ]
 
@@ -147,17 +147,17 @@ const contentToPopulate = [
         topic: 'Engineering',
         name: 'Computer Architecture',
         updatedBy: userIds[0],
-        updatedAt: Date.now,
+        updatedAt: Date.now(),
         createdBy: userIds[0],
-        createdAt: Date.now
+        createdAt: Date.now()
     },
     {
         topic: 'Engineering',
         name: 'Human-Computer Interaction',
         updatedBy: userIds[0],
-        updatedAt: Date.now,
+        updatedAt: Date.now(),
         createdBy: userIds[0],
-        createdAt: Date.now
+        createdAt: Date.now()
     }
 ]
 
