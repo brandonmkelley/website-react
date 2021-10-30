@@ -87,6 +87,7 @@ export default function(params: TopNavParams) {
     
     const padToHeight = Math.floor((parseInt(params.height) - 40) / 2);
     const includeProducts = false
+    const includeCalendar = false
 
     return (
         <Navbar bg="transparent" variant="light" expand="lg" style={{ paddingTop: padToHeight, paddingBottom: padToHeight }}>
@@ -100,7 +101,7 @@ export default function(params: TopNavParams) {
                         </NavDropdown>
                     }
 
-                    { userEmail &&
+                    { includeCalendar && userEmail &&
                         <Nav.Link as={Link} to="/calendar">Calendar</Nav.Link>
                     }
 

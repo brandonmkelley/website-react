@@ -38,7 +38,7 @@ export default () => {
                     interaction</b> and <b>advanced computer architecture</b>.
                     I currently work as a Renewables Data Analyst in the Sustainable Solutions group
                     at the <a href="https://sustainablesolutions.duke-energy.com/" target="_blank">Duke Energy Corporation</a>.
-                    I collaborate with peers to address contemporary issues in research and the application of advanced
+                    I collaborate with peers to address contemporary issues, requiring research, data modeling, and applications of advanced
                     technology. My favorite hobbies include reading, playing guitar, and changing my lifestyle.
                     Please feel free to reach out and connect with me.
                 </div>
@@ -55,7 +55,7 @@ export default () => {
                     <div className="col-12 col-md-6 col-lg-4 pt-md-5 pb-md-3">
                         <h4>Topics</h4>
                         <ul>
-                            <li>Solar Industry Analytics</li>
+                            <li>Operational Analytics in the Solar industry</li>
                             <li>Human-Computer Interaction</li>
                             <li>Computer Architecture</li>
                             <li>Embedded Systems</li>
@@ -63,7 +63,7 @@ export default () => {
                         </ul>
                         <h4>Work Experience</h4>
                         <ul>
-                            <li>Duke Energy Corporation</li>
+                            <li>Duke Energy Sustainable Solutions</li>
                             <li>Cal Poly Corporation</li>
                             <li>Microsoft Corporation</li>
                         </ul>
@@ -71,8 +71,10 @@ export default () => {
                     <div className="col-12 col-md-6 col-lg-4 pt-md-5 pb-3">
                         <h4>Projects</h4>
                         <ul>
-                            <li>Solar site performance reporting</li>
-                            <li>FPGA processor using RiSC-16 ISA</li>
+                            <li>Automated solar monitoring</li>
+                            <li>End-to-end deployment of Data Acquisition Systems (DAS)</li>
+                            <li>Scheduling with Theory of Constraints</li>
+                            <li>RiSC-16 ISA implemented on an FPGA</li>
                             <li>Pipelining and prediction architectures</li>
                             <li>Field-oriented pump control</li>
                             <li>Robotics &amp; augmented environments</li>
@@ -98,10 +100,9 @@ export default () => {
                         <ul>
                             <li>Trivia Night!</li>
                             <li>Operational Excellence in Solar</li>
-                            <li>Grassroots Custom Satisfaction</li>
+                            <li>Grassroots Customer Satisfaction</li>
                             <li>Cal Poly Computer Engineering</li>
                             <li>HackingEDU</li>
-                            <li>Sigma Phi Delta Engineering Fraternity</li>
                         </ul>
                         <h4>Events</h4>
                         <ul>
@@ -161,11 +162,11 @@ export default () => {
                         </ul>
                         <h4>Lifestyle</h4>
                         <ul>
-                            <li>Musical interests and performance</li>
-                            <li>Streaming and filmography</li>
+                            <li>Musical interests</li>
                             <li>E-Sports and online gaming</li>
+                            <li>I watch WAY too many shows</li>
                             <li>Water and material conservation</li>
-                            <li>Views as a veteran vegan</li>
+                            <li>I used to be a vegan and am no longer</li>
                             <li>Personal productivity</li>
                         </ul>
                     </div>
