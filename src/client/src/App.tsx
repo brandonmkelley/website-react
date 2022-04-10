@@ -17,12 +17,13 @@ import 'devextreme/dist/css/dx.light.css'
 
 import TopNav from './components/TopNav'
 
-import PersonalHome from './pages/PersonalHome'
+import Home from './pages/Home'
 
 import { authSlice } from './slices/auth'
+import Account from './pages/Account'
 
 import Config_Content from './pages/Config_Content'
-import PersonalCalendar from './pages/PersonalCalendar'
+import Calendar from './pages/Calendar'
 import FlexWorks_Chat from './pages/FlexWorks_Chat'
 import FlexWorks_Email from './pages/FlexWorks_Email'
 import FlexWorks_Account from './pages/FlexWorks_Account'
@@ -58,11 +59,14 @@ export default function() {
         <Col xs={ 12 }><TopNav height={ navHeight }/></Col>
         <div style={{ height: appHeight, width: '100%' }}>
           <Switch>
-            <Route exact path="/" component={ PersonalHome }/>
+            <Route exact path="/" component={ Home }/>
+            { userEmail &&
+              <Route exact path="/account" component={ Account }/> }
+
             { userEmail && userEmail == 'brandonmkelley@outlook.com' && 
               <Route exact path="/config/content" component={ Config_Content }/> }
             { userEmail &&
-              <Route exact path="/calendar" component={ PersonalCalendar }/> }
+              <Route exact path="/calendar" component={ Calendar }/> }
             <Route exact path="/flexworks/chat" component={ FlexWorks_Chat }/>
             <Route exact path="/flexworks/email" component={ FlexWorks_Email }/>
             <Route exact path="/flexworks/account" component={ FlexWorks_Account }/>

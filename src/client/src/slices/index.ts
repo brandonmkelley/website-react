@@ -12,6 +12,7 @@ import { subjectSlice } from './subject'
 import { messageSlice } from './message'
 import { chatSlice } from './chat'
 import { contentSlice } from './content'
+import { composeEvent } from 'api/build'
 
 export const dataSlices = [ subjectSlice, userSlice, messageSlice, chatSlice, contentSlice ]
 
@@ -27,11 +28,18 @@ export class Subscriber {
     }
 }
 
-const allSlicesMap = dataSlices.reduce((result: any, slice: any) => {
-    for (var actionName of Object.keys(slice.actions))
-        result[slice.name + '-' + actionName] = (slice.actions as { [name: string]: Action })[actionName]
+const apiEventActions = dataSlices.reduce((eventActions: any, slice: any) => {
+    let dataEntity = slice.name
+    let sliceActions = slice.actions as { [name: string]: Action }
 
-    return result
+    for (var sliceActionName of Object.keys(slice.actions)) {
+        let dataTranslation = sliceActionName
+        let apiEvent = composeEvent("socket", "sub", dataEntity, dataTranslation)
+
+        eventActions[apiEvent] = sliceActions[sliceActionName]
+    }
+
+    return eventActions
 }, {})
 
 function useDatabaseState() {
@@ -42,7 +50,7 @@ function useDatabaseState() {
         //console.log('Subscribing to Socket IO event: ' + event)
 
         socket.on(subscriber.event, (result: any) => {
-            dispatch(allSlicesMap[subscriber.event](result))
+            dispatch(apiEventActions[subscriber.event](result))
 
             //console.log('Socket event triggered for event: ' + event)
             //console.log('Dispatching the following result: ')

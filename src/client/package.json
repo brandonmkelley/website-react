@@ -14,6 +14,7 @@
     "@types/react-redux": "^7.1.9",
     "@types/react-router-dom": "^5.1.5",
     "@types/socket.io-client": "^1.4.33",
+    "api": "file:../api",
     "bootstrap": "^4.5.0",
     "devextreme": "20.2.7",
     "devextreme-react": "20.2.7",

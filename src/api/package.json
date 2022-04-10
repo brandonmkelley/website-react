@@ -1,0 +1,23 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "API description shared between client and server.",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brandonmkelley/website-react.git"
+  },
+  "author": "Brandon M. Kelley",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brandonmkelley/website-react/issues"
+  },
+  "homepage": "https://github.com/brandonmkelley/website-react#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^4.6.3"
+  }
+}

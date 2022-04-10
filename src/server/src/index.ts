@@ -85,32 +85,33 @@ credential: firebaseAdmin.credential.cert('./static/firebaseServiceAccount.json'
 
 import { ChangeEventUpdate } from "mongodb"
 
-import { IUser } from '../../model/src/IUser'
-
 import * as userModel from './models/User'
 import * as subjectModel from './models/Subject'
 import * as messageModel from './models/Message'
 import * as chatModel from './models/Chat'
 import * as contentModel from './models/Content'
 
-import { EventQuery } from './models/EventQuery'
+import { EventToQueryResponseBinding } from './models/EventToQueryResponseBinding'
 import SocketIO = require("socket.io")
 
-const modelSubscriptions = [ userModel, subjectModel, messageModel, chatModel, contentModel ]
+const modelSubscriptions = [
+    userModel, subjectModel, messageModel, chatModel, contentModel ]
 
 const User = userModel.model
-const Message = messageModel.model
 
 modelSubscriptions.map(m => {
     // This nastiness will allow all queries to watch their base models.
-    m.queries.map((q: EventQuery<any>) => {
-        q.baseModel.watch().on('change',
+    m.queries.map((q: EventToQueryResponseBinding<any>) => {
+        if (q.responseQueryShouldBeWatched) {
+
+            q.model.watch().on('change',
             (e: ChangeEventUpdate<mongoose.Model<any>>) => {
                 const watchContext = {}
                 watchContext[q.event] = e.documentKey
 
                 Object.values(io.to(q.event).sockets).map(async s => {
-                    const result = await q.exec(s.handshake.session, watchContext)
+                    const appContext: any = { user: s.handshake.session.user }
+                    const result = await q.exec(appContext, watchContext)
 
                     if (result) {
                         const response = {
@@ -131,11 +132,22 @@ modelSubscriptions.map(m => {
         // Added nastiness for queries that watch OTHER models as well...
         //q.sensitivityList.map(other => {
         //})
+
+        }
     })
 })
 
-async function subscribeSessionToQuery(socket: SocketIO.Socket, query: EventQuery<any>) {
-    const result = await query.exec(socket.handshake.session)
+async function subscribeSessionToQuery(
+    socket: SocketIO.Socket,
+    query: EventToQueryResponseBinding<any>,
+    eventPayload: any) {
+
+    let appContext = {
+        user: socket.handshake.session.user,
+        eventPayload: eventPayload
+    }
+
+    const result = await query.exec(appContext)
 
     if (result) {
         const response = {
@@ -152,41 +164,44 @@ async function subscribeSessionToQuery(socket: SocketIO.Socket, query: EventQuer
     socket.join(query.event)
 }
 
-io.on('connection', socket => {
+io.on('connection', async socket => {
 
     modelSubscriptions.map(m => {
         m.queries.map(q => {
-            socket.on(q.event, async function(subscriber: any) {
-                if (socket.handshake.session.user)
-                    subscribeSessionToQuery(socket, q)
+            socket.on(q.event, async function(eventPayload: any) {
 
-                else if (subscriber && typeof(subscriber.sid) == 'string')
-                    firebaseAdminRef.auth().verifyIdToken(subscriber.sid)
+                if (socket.handshake.session.user)
+                    await subscribeSessionToQuery(socket, q, eventPayload)
+
+                else if (eventPayload && typeof(eventPayload.sid) == 'string')
+                    firebaseAdminRef.auth().verifyIdToken(eventPayload.sid)
                         .then(async (decoded: any) => {
-                            const user = await User.findOne({ email: decoded.email })
-                            socket.handshake.session.user = user
+                            const user = await User.findOne({ email: { $eq: decoded.email }})
+                            
+                            socket.handshake.session.user = {
+                                _id: user._id,
+                                email: decoded.email
+                            }
+
                             socket.handshake.session.save()
 
-                            subscribeSessionToQuery(socket, q)
+                            await subscribeSessionToQuery(socket, q, eventPayload)
                         })
             })
         })
     })
-
+/*
     socket.off('user-id', console.log)
 
     // Should accept EITHER subscriber or payload
     socket.on('user-id', async (subscriber: any) => {
-        //console.log(subscriber)
 
         if (subscriber && typeof(subscriber.sid) == 'string')
             firebaseAdminRef.auth().verifyIdToken(subscriber.sid)
                 .then(async (decoded: any) => {
-                    //console.log(decoded)
 
                     const user = await User.findOne({ email: decoded.email })
-
-                    //console.log(user)
+                    console.log(user)
 
                     const response = {
                         apimeta: {
@@ -201,26 +216,6 @@ io.on('connection', socket => {
 
                     socket.handshake.session.user = user
                     socket.handshake.session.save()
-
-                    const userIdPipeline = User.aggregate()
-                        .match({ 'fullDocument.email': decoded.email })
-                        .match({ 'operationType': { '$in': ['update'] } })
-                        .pipeline()
-
-                    User.watch(userIdPipeline, { 'fullDocument': 'updateLookup' })
-                        .on('change', (e: ChangeEventUpdate<mongoose.Model<IUser>>) =>
-                            {
-                                const response = {
-                                    apimeta: {
-                                        scope: e.operationType,
-                                        query: 'user-id',
-                                        _id: e.documentKey._id
-                                    },
-                                    data: e.fullDocument
-                                }
-
-                                io.emit('user-id', response)
-                            })
                 })
         else
             socket.emit('user-id', null)
@@ -233,6 +228,8 @@ io.on('connection', socket => {
 
         await user.save()
     })
+*/
+
 })
 
 

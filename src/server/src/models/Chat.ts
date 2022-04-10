@@ -1,14 +1,17 @@
 
 import * as mongoose from 'mongoose'
 
-import { EventQuery } from './EventQuery'
+import { EventToQueryResponseBinding, QueryPipelineBuilder } from './EventToQueryResponseBinding'
 
 import * as UserModel from './User'
 import * as MessageModel from './Message'
 
+import { IMessage } from '../../../model/src/IMessage'
+
 function chatPipeline(appContext?: any, watchContext?: any) {
-    const allMessages = MessageModel.baseQuery.aggregate()
-    const changedMessages = MessageModel.baseQuery.aggregate(null, watchContext)
+    const allMessages = MessageModel.baseQuery.responseQueryPipelineBuilder.aggregate(appContext)
+    const changedMessages = MessageModel.baseQuery.responseQueryPipelineBuilder.aggregate(appContext, watchContext)
+
     const user = appContext.user
 
     const chatMessagePipeline = allMessages
@@ -47,6 +50,9 @@ function chatPipeline(appContext?: any, watchContext?: any) {
     return chatUserPipeline
 }
 
-const chatQuery = new EventQuery('chat-view', MessageModel.model, chatPipeline)
+const chatQueryBuilder = new QueryPipelineBuilder<IMessage>(
+    MessageModel.model, chatPipeline)
+
+const chatQuery = new EventToQueryResponseBinding('chat-view', MessageModel.model, true, chatQueryBuilder)
 
 export const queries = [ chatQuery ]

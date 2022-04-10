@@ -1,7 +1,7 @@
 
 import * as mongoose from 'mongoose'
 
-import { EventQuery } from './EventQuery'
+import { EventToQueryResponseBinding } from './EventToQueryResponseBinding'
 
 import { ISubject } from '../../../model/src/ISubject'
 
@@ -18,13 +18,8 @@ const SubjectSchema = new mongoose.Schema<ISubject>({
 
 export const SubjectModel = mongoose.model<ISubject>('Subject', SubjectSchema)
 
-export const model = SubjectModel
+export const model: mongoose.Model<any> = SubjectModel
 
-/*
-const subjectViewQuery = new EventQuery<ISubject>('subject-view',
-    () => model.find({}))
-*/
-
-const baseQuery = new EventQuery('subject-view', model)
+const baseQuery = new EventToQueryResponseBinding('subject-view', model, true)
 
 export const queries = [ baseQuery ]

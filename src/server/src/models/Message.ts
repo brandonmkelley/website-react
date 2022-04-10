@@ -1,7 +1,7 @@
 
 import * as mongoose from 'mongoose'
 
-import { EventQuery } from './EventQuery'
+import { EventToQueryResponseBinding } from './EventToQueryResponseBinding'
 
 import { IMessage } from '../../../model/src/IMessage'
 
@@ -26,13 +26,8 @@ const MessageSchema = new mongoose.Schema<IMessage>({
 
 export const MessageModel = mongoose.model<IMessage>('Message', MessageSchema)
 
-export const model = MessageModel
+export const model: mongoose.Model<any> = MessageModel
 
-/*
-export const baseQuery = new EventQuery<IMessage>('message-view',
-    () => model.find({}))
-*/
-
-export const baseQuery = new EventQuery('message-view', model)
+export const baseQuery = new EventToQueryResponseBinding('message-view', model, true)
 
 export const queries = [ baseQuery ]

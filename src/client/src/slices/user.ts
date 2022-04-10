@@ -3,6 +3,8 @@ import { createSlice } from '@reduxjs/toolkit'
 
 import { AppState, initialState } from '../AppState'
 
+import { IUser } from '../../../model/src/IUser'
+
 export const userSlice = createSlice({
     name: 'user',
     initialState: initialState,
@@ -31,7 +33,8 @@ export const userSlice = createSlice({
             }
         },
         id: (state: AppState, action: any) => {
-            return ({ ...state, user: action.payload.data })
+            const user = Object.values<IUser>(action.payload.data)[0]
+            return ({ ...state, user: user })
         }
     }
 })

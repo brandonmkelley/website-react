@@ -1,6 +1,11 @@
 
 db/data
 node_modules
+package-lock.json
+
+src/api/package-lock.json
+src/api/node_modules
+src/api/build
 
 src/client/package-lock.json
 src/client/node_modules

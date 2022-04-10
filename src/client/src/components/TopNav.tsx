@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
+import NavItem from 'react-bootstrap/NavItem'
 // import NavDropdown from 'react-bootstrap/NavDropdown'
 import Form from 'react-bootstrap/Form'
 import FormControl from 'react-bootstrap/FormControl'
@@ -155,17 +156,17 @@ export default function(params: TopNavParams) {
                     </Form>
                 }
                 { userEmail &&
-                    <div>Logged in as: <b style={{ color: '#777' }}>{ userEmail }</b></div>
+                    <Navbar.Text>Logged in as: <b style={{ color: '#777' }}>{ userEmail }</b></Navbar.Text>
                 }
                 { userEmail && 
-                    <Nav.Link as={Link} to="/flexworks/account"
-                        className="fa fa-user-circle pt-2 pb-1 mt-0 mb-0 mr-3 ml-3"
+                    <Nav.Link as={Link} to="/account"
+                        className="fa fa-user-circle pt-2 pb-1 mt-0 mb-0"
                         style={{ fontSize: '16px' }}></Nav.Link>
                 }
                 { userEmail &&
-                    <Form inline>
+                    <Navbar.Text><Form inline>
                         <Button variant="outline-danger" onClick={ signOut }>Sign out</Button>
-                    </Form>
+                    </Form></Navbar.Text>
                 }
                 { /*userEmail && 
                     <Form inline>
