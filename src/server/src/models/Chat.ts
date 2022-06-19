@@ -6,7 +6,7 @@ import { EventToQueryResponseBinding, QueryPipelineBuilder } from './EventToQuer
 import * as UserModel from './User'
 import * as MessageModel from './Message'
 
-import { IMessage } from '../../../model/src/IMessage'
+import IMessage from 'model/build/IMessage'
 
 function chatPipeline(appContext?: any, watchContext?: any) {
     const allMessages = MessageModel.baseQuery.responseQueryPipelineBuilder.aggregate(appContext)

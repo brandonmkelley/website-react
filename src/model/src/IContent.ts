@@ -1,7 +1,7 @@
 
 import { Document } from 'mongoose'
 
-export interface IContent extends Document {
+export default interface IContent extends Document {
     topic: String,
     name: String,
     

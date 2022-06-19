@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose'
 
 import { EventToQueryResponseBinding } from './EventToQueryResponseBinding'
 
-import { IMessage } from '../../../model/src/IMessage'
+import IMessage from 'model/build/IMessage'
 
 const MessageSchema = new mongoose.Schema<IMessage>({
     email: { type: String },

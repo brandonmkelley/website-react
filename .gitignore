@@ -7,6 +7,7 @@ src/api/package-lock.json
 src/api/node_modules
 src/api/build
 
+
 src/client/package-lock.json
 src/client/node_modules
 src/client/build
@@ -14,4 +15,10 @@ src/client/build
 src/server/package-lock.json
 src/server/node_modules
 src/server/static
+src/server/src/index.js
+src/server/src/models/*.js
+
+src/model/package-lock.json
+src/model/node_modules
+src/model/build
 

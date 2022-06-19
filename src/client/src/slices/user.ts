@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 import { AppState, initialState } from '../AppState'
 
-import { IUser } from '../../../model/src/IUser'
+import IUser from '../../../model/src/IUser'
 
 export const userSlice = createSlice({
     name: 'user',

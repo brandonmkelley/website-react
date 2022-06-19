@@ -1,10 +1,10 @@
 
 import { Document } from 'mongoose'
 
-import { IUser } from './IUser'
-import { ISubject } from './ISubject'
+import IUser from './IUser'
+import ISubject from './ISubject'
 
-export interface IMessage extends Document {
+export default interface IMessage extends Document {
     subjectId: ISubject['_id'],
     body: String,
     fromUserID: IUser['_id'],

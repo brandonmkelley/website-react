@@ -1,7 +1,7 @@
 
 import { Document } from 'mongoose'
 
-export interface ISubject extends Document {
+export default interface ISubject extends Document {
     name: { type: String },
     
     updatedBy: String,

@@ -16,13 +16,15 @@ var prod = pathIndex !== -1
 
 if (prod) {
     const httpsOptions = {
-    	key: fs.readFileSync('./static/private.key'),
-        cert: fs.readFileSync('./static/certificate.crt'),
-        ca: fs.readFileSync('./static/ca_bundle.crt')
+    	key: fs.readFileSync('./static/privkey.pem'),
+        cert: fs.readFileSync('./static/cert.pem'),
+	ca: fs.readFileSync('./static/fullchain.pem')
     }
     
     server = createHTTPSServer(httpsOptions, app)
     port = 4430
+
+    console.log('https server setup')
 }
 
 else {
@@ -36,15 +38,18 @@ var argStart = 0;
 do {
     pathIndex = process.argv.indexOf('-s', argStart)
 
-    if (pathIndex !== -1 && process.argv.length > pathIndex + 1) {
-        var staticPath = process.argv[pathIndex + 1]
-        console.log('Loading static files from path: ' + staticPath)
-        app.use('/static', express.static(staticPath))
+    if (pathIndex !== -1 && process.argv.length > pathIndex + 2) {
+        var endpoint = process.argv[pathIndex + 1]
+        var staticPath = process.argv[pathIndex + 2]
+	console.log('Loading static files from path: ' + staticPath
+		+ ' and hosting them at endpoint: ' + endpoint)
+		app.use(endpoint, express.static(staticPath))
     }
 
-    argStart = pathIndex + 1;
+    if (pathIndex !== -1)
+       argStart = pathIndex + 3;
 }
-while (argStart && argStart < process.argv.length)
+while (pathIndex !== -1 && argStart < process.argv.length)
 
 import * as socketio from 'socket.io'
 const io = socketio(server)
@@ -183,7 +188,7 @@ io.on('connection', async socket => {
                                 email: decoded.email
                             }
 
-                            socket.handshake.session.save()
+			    socket.handshake.session.save(() => {})
 
                             await subscribeSessionToQuery(socket, q, eventPayload)
                         })
@@ -235,6 +240,9 @@ io.on('connection', async socket => {
 
 
 if (prod)
-    server.listen(port)
+{
+console.log('starting prod server')
+server.listen(port)
+}
 else
     server.listen(port, '127.0.0.1')

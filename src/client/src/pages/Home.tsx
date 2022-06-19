@@ -39,7 +39,7 @@ export default () => {
                     I received my <b>B.S. in Computer Engineering</b> at California Polytechnic State University in
                     San Luis Obispo, California, with culminating work in human-computer
                     interaction and advanced computer architecture. This year, I plan to continue education as an incoming student to the <b>
-                    M.S. in Business Analytics</b> program at University of Calforia in Irvine, California.
+                    M.S. in Business Analytics</b> program at University of California in Irvine, California.
                     I work as a <b>Data Scientist</b> in the Sustainable Solutions group
                     at the <a href="https://sustainablesolutions.duke-energy.com/" target="_blank">Duke Energy Corporation</a>.
                     I collaborate with peers to address contemporary issues, requiring research, data modeling, and applications of advanced
@@ -88,7 +88,7 @@ export default () => {
                         <h4>Resources</h4>
                         <ul>
                             <li><a target="_blank" href="https://linkedin.com/in/14bmkelley">LinkedIn profile</a></li>
-                            <li><a target="_blank" href="~/files/Resume - Brandon Micale Kelley.pdf">Downloadable resume</a></li>
+                            <li><a target="_blank" href="/static/files/Resume - Brandon Kelley - 2022.06.01.pdf">Downloadable resume</a></li>
                         </ul>
                     </div>
                 </div>

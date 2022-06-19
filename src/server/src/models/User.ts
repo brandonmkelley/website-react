@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose'
 
 import { QueryPipelineBuilder, EventToQueryResponseBinding } from './EventToQueryResponseBinding'
 
-import { IUser } from '../../../model/src/IUser'
+import IUser from 'model/build/IUser'
 
 import { EVENTS } from '../../../api/src'
 

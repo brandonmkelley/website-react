@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose'
 
 import { EventToQueryResponseBinding } from './EventToQueryResponseBinding'
 
-import { IContent } from '../../../model/src/IContent'
+import IContent from 'model/build/IContent'
 
 const ContentSchema = new mongoose.Schema<IContent>({
     topic: { type: String },

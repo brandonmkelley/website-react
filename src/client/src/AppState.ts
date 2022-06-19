@@ -1,8 +1,8 @@
 
-import { IUser } from '../../model/src/IUser'
-import { ISubject } from '../../model/src/ISubject'
-import { IMessage } from '../../model/src/IMessage'
-import { IContent } from '../../model/src/IContent'
+import IUser from '../../model/src/IUser'
+import ISubject from '../../model/src/ISubject'
+import IMessage from '../../model/src/IMessage'
+import IContent from '../../model/src/IContent'
 
 export interface AppState {
     layoutPlatform?: string | null,
