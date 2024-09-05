@@ -40,8 +40,8 @@ export default () => {
                     San Luis Obispo, California, with culminating work in human-computer
                     interaction and advanced computer architecture. This year, I plan to continue education as an incoming student to the <b>
                     M.S. in Business Analytics</b> program at University of California in Irvine, California.
-                    I work as a <b>Data Scientist</b> in the Sustainable Solutions group
-                    at the <a href="https://sustainablesolutions.duke-energy.com/" target="_blank">Duke Energy Corporation</a>.
+                    I work as the <b>Director of Systems</b> in software analytics and strategy
+                    at <a href="https://dynamicenergy.com/" target="_blank">Dynamic Energy</a>.
                     I collaborate with peers to address contemporary issues, requiring research, data modeling, and applications of advanced
                     technology. My hobbies include reading, playing guitar, and changing my lifestyle.
                     Please feel free to reach out and connect with me.
@@ -59,8 +59,8 @@ export default () => {
                     <div className="col-12 col-md-6 col-lg-4 pt-md-5 pb-md-3">
                         <h4>Topics</h4>
                         <ul>
-                            <li>Solar Performance Monitoring</li>
                             <li>Operational Analytics</li>
+                            <li>Solar Performance Monitoring</li>
                             <li>Human-Computer Interaction</li>
                             <li>Computer Architecture</li>
                             <li>Embedded Systems</li>
@@ -68,8 +68,8 @@ export default () => {
                         </ul>
                         <h4>Work Experience</h4>
                         <ul>
+                            <li>Dynamic Energy</li>
                             <li>Duke Energy Sustainable Solutions</li>
-                            <li>Cal Poly Corporation</li>
                             <li>Microsoft Corporation</li>
                             <li>... and many more in between!</li>
                         </ul>
@@ -77,6 +77,7 @@ export default () => {
                     <div className="col-12 col-md-6 col-lg-4 pt-md-5 pb-3">
                         <h4>Skills</h4>
                         <ul>
+                            <li>Leadership, hiring, contracting, vision</li>
                             <li>Jupyter, Numpy, Pandas, Apache Spark</li>
                             <li>Microsoft Excel, SQL Server, Power BI</li>
                             <li>Azure App Services, Functions, Synapse</li>
@@ -88,7 +89,7 @@ export default () => {
                         <h4>Resources</h4>
                         <ul>
                             <li><a target="_blank" href="https://linkedin.com/in/14bmkelley">LinkedIn profile</a></li>
-                            <li><a target="_blank" href="/static/files/Resume - Brandon Kelley - 2022.06.01.pdf">Downloadable resume</a></li>
+                            <li><a target="_blank" href="https://drive.google.com/drive/folders/1By-vW6D5l9-aklLVs6E2Fse54B5rh22v?usp=sharing">Downloadable resume</a></li>
                         </ul>
                     </div>
                 </div>
@@ -111,8 +112,8 @@ export default () => {
                         </ul>
                         <h4>Destinations</h4>
                         <ul>
-                            <li>Disneyland</li>
                             <li>Big Bear Lake, CA</li>
+                            <li>San Diego, CA</li>
                             <li>Seattle, WA</li>
                             <li>A Whirlwind of Florida!</li>
                         </ul>
@@ -121,8 +122,8 @@ export default () => {
                     <h4>Team Involvement</h4>
                         <ul>
                             <li>Trivia Night!</li>
-                            <li>Solar Operations and Maintenance</li>
                             <li>Grassroots teams</li>
+                            <li>Grid Alternative solar install</li>
                             <li>Cal Poly Computer Engineering</li>
                             <li>HackingEDU</li>
                         </ul>
